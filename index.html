@@ -232,14 +232,137 @@ body {
 .energy-warn { font-size: 10px; color: var(--red); font-weight: 600; display: none; animation: blink 1s step-end infinite; }
 @keyframes blink { 50% { opacity: 0; } }
 
-/* ===== GAMES GRID ===== */
-.games-grid {
+/* ===== GAMES GRID / PAGE ROUTER ===== */
+.games-grid { display: block; }
+
+/* All game panels hidden by default — shown one at a time */
+.games-grid .game-panel { display: none; }
+.games-grid .game-panel.page-active {
+  display: block;
+  max-width: 760px;
+  margin: 0 auto;
+}
+/* Full-width panels (poker, chicken, vip-door) can go wider */
+.games-grid .game-panel.page-active.full-width { max-width: 1100px; }
+
+/* ===== CASINO SELECT PAGE ===== */
+#casino-select { display: none; }
+#casino-select.page-active { display: block; }
+
+.casino-select-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+.casino-card {
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.18s, box-shadow 0.18s;
+  position: relative;
+}
+.casino-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.5); }
+
+.casino-card-banner {
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.casino-card-banner-icon {
+  font-size: 52px;
+  filter: drop-shadow(0 0 20px rgba(255,255,255,0.2));
+  z-index: 1;
+}
+.casino-card-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.casino-card-name { font-size: 16px; font-weight: 800; }
+.casino-card-sub  { font-size: 11px; color: var(--text-mute); line-height: 1.5; }
+.casino-card-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+.casino-card-tag  {
+  font-size: 9px; font-weight: 700; letter-spacing: 1px;
+  border-radius: 4px; padding: 3px 8px;
+}
+.casino-card-enter {
+  margin-top: 8px;
+  border: none; border-radius: 8px;
+  padding: 10px; font-size: 12px; font-weight: 700;
+  cursor: pointer; font-family: 'Inter', sans-serif;
+  width: 100%; transition: filter 0.12s;
+}
+.casino-card-enter:hover { filter: brightness(1.15); }
+.casino-card-locked-banner {
+  position: absolute; top: 12px; right: 12px;
+  background: rgba(0,0,0,0.6); border: 1px solid rgba(245,166,35,0.4);
+  color: var(--gold); font-size: 9px; font-weight: 700;
+  letter-spacing: 1px; padding: 3px 8px; border-radius: 4px;
 }
 
-.games-grid .full-width { grid-column: 1 / -1; }
+/* ===== CASINO LOBBY ===== */
+#casino-lobby { display: none; }
+#casino-lobby.page-active { display: block; }
+
+.lobby-greeting {
+  margin-bottom: 20px;
+}
+.lobby-greeting h2 { font-size: 22px; font-weight: 800; color: var(--text); }
+.lobby-greeting p  { font-size: 12px; color: var(--text-mute); margin-top: 4px; }
+
+.lobby-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.lobby-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+  overflow: hidden;
+}
+.lobby-card:hover {
+  border-color: var(--teal);
+  background: var(--panel2);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+.lobby-card-icon { font-size: 28px; }
+.lobby-card-name { font-size: 13px; font-weight: 700; color: var(--text); }
+.lobby-card-desc { font-size: 10px; color: var(--text-mute); line-height: 1.4; }
+.lobby-card-cheat {
+  font-size: 8px; font-weight: 700; letter-spacing: 1px;
+  background: var(--cheat-bg); color: var(--cheat-glow);
+  border: 1px solid rgba(168,85,247,0.3);
+  border-radius: 3px; padding: 2px 6px;
+  width: fit-content;
+}
+.lobby-card-vip {
+  font-size: 8px; font-weight: 800; letter-spacing: 1px;
+  background: rgba(245,166,35,0.1); color: var(--gold);
+  border: 1px solid rgba(245,166,35,0.3);
+  border-radius: 3px; padding: 2px 6px;
+  width: fit-content;
+}
+.lobby-section-title {
+  font-size: 10px; font-weight: 600; color: var(--text-mute);
+  letter-spacing: 1.5px; text-transform: uppercase;
+  margin: 16px 0 8px;
+}
+.lobby-section-title:first-child { margin-top: 0; }
 
 /* ===== GAME PANEL ===== */
 .game-panel {
@@ -722,6 +845,83 @@ body {
 .confetti-piece { position:absolute; width:8px; height:8px; border-radius:2px; animation:confettiFall 2s ease-in forwards; }
 @keyframes confettiFall { 0%{transform:translateY(-20px) rotate(0deg);opacity:1} 100%{transform:translateY(100vh) rotate(720deg);opacity:0} }
 
+/* ===== HOME PAGE ===== */
+.home-overlay {
+  position: fixed; inset: 0; z-index: 3000;
+  background: #080e14;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: flex-start;
+  overflow-y: auto;
+  transition: opacity 0.6s ease;
+  padding-top: 20px;
+}
+.home-overlay.fade-out { opacity: 0; pointer-events: none; }
+.home-bg-glow {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse at 50% 40%, rgba(0,231,1,0.06) 0%, transparent 65%),
+              radial-gradient(ellipse at 20% 80%, rgba(124,58,237,0.07) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 20%, rgba(245,166,35,0.05) 0%, transparent 50%);
+}
+.home-logo-wrap {
+  text-align: center; margin-bottom: 32px; position: relative;
+}
+.home-logo-icon {
+  width: 72px; height: 72px; border-radius: 16px;
+  background: var(--teal); color: #0f1923;
+  font-size: 36px; font-weight: 900;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+  box-shadow: 0 0 40px rgba(0,231,1,0.35), 0 0 80px rgba(0,231,1,0.12);
+}
+.home-logo-name {
+  font-size: 52px; font-weight: 800; color: #fff;
+  letter-spacing: -2px; line-height: 1;
+}
+.home-logo-name span { color: var(--teal); }
+.home-logo-tag {
+  font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--text-mute); margin-top: 6px;
+}
+.home-tagline {
+  font-size: 15px; color: var(--text-dim); margin-bottom: 40px;
+  text-align: center; max-width: 400px; line-height: 1.6;
+}
+.home-enter-btn {
+  background: var(--teal); color: #0f1923;
+  border: none; border-radius: 10px;
+  padding: 16px 48px; font-size: 16px; font-weight: 800;
+  cursor: pointer; font-family: 'Inter', sans-serif;
+  letter-spacing: 0.5px;
+  box-shadow: 0 0 30px rgba(0,231,1,0.3);
+  transition: all 0.15s;
+  position: relative;
+}
+.home-enter-btn:hover { background: #00c801; transform: scale(1.04); box-shadow: 0 0 50px rgba(0,231,1,0.45); }
+.home-enter-btn:active { transform: scale(0.98); }
+.home-stats-bar {
+  display: flex; gap: 32px; margin-top: 48px;
+  border-top: 1px solid var(--border);
+  padding-top: 24px; position: relative;
+}
+.home-stat { text-align: center; }
+.home-stat-val { font-size: 20px; font-weight: 800; color: var(--teal); }
+.home-stat-label { font-size: 10px; color: var(--text-mute); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+.home-games-preview {
+  display: flex; gap: 8px; margin-bottom: 32px; flex-wrap: wrap; justify-content: center;
+  max-width: 420px;
+}
+.home-game-chip {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 20px; padding: 6px 12px;
+  font-size: 11px; color: var(--text-dim);
+  display: flex; align-items: center; gap: 5px;
+}
+.home-cheat-badge {
+  font-size: 9px; background: rgba(124,58,237,0.2); color: var(--cheat-glow);
+  border: 1px solid rgba(124,58,237,0.3); border-radius: 3px; padding: 1px 5px;
+  font-weight: 700; letter-spacing: 0.5px;
+}
+
 /* ===== SCROLLBAR ===== */
 ::-webkit-scrollbar { width:4px; height:4px; }
 ::-webkit-scrollbar-track { background:transparent; }
@@ -734,13 +934,464 @@ body {
   .nav-item { justify-content:center; padding:10px; }
   .main { margin-left:60px; }
   .stats-hud { left:76px; }
-  .games-grid { grid-template-columns:1fr; }
+  .lobby-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* ===== PROGRESSION / XP ===== */
+.xp-widget {
+  margin: 0 12px 8px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+}
+.xp-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; }
+.xp-level { font-size:12px; font-weight:700; color:var(--gold); }
+.xp-title { font-size:10px; color:var(--text-mute); }
+.xp-track { height:5px; background:rgba(255,255,255,0.08); border-radius:3px; overflow:hidden; }
+.xp-fill { height:100%; background:linear-gradient(90deg, var(--gold), #f7c948); border-radius:3px; transition:width 0.5s ease; }
+.xp-label { font-size:9px; color:var(--text-mute); margin-top:3px; text-align:right; }
+
+/* ===== LEVEL-UP TOAST ===== */
+.levelup-toast {
+  position:fixed; top:70px; left:50%; transform:translateX(-50%) translateY(-20px);
+  background:linear-gradient(135deg, #1a2c38, #213743);
+  border:1px solid var(--gold);
+  border-radius:10px; padding:14px 24px; text-align:center;
+  z-index:2000; opacity:0; pointer-events:none;
+  transition:all 0.4s ease;
+  box-shadow:0 0 30px rgba(245,166,35,0.3);
+}
+.levelup-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+.levelup-toast .lt-title { font-size:11px; color:var(--gold); letter-spacing:2px; text-transform:uppercase; margin-bottom:2px; }
+.levelup-toast .lt-level { font-size:22px; font-weight:800; color:#fff; }
+.levelup-toast .lt-unlocked { font-size:11px; color:var(--text-dim); margin-top:4px; }
+
+/* ===== SHOP NAV BADGE ===== */
+.nav-item .nav-badge { font-size:9px; background:var(--gold); color:#000; border-radius:3px; padding:1px 4px; font-weight:700; margin-left:auto; }
+
+/* ===== SHOP MODAL ===== */
+.shop-overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:1500;
+  display:none; align-items:flex-start; justify-content:center;
+  padding-top:40px; overflow-y:auto;
+}
+.shop-overlay.open { display:flex; }
+.shop-modal {
+  background:var(--panel); border:1px solid var(--border);
+  border-radius:12px; width:700px; max-width:95vw;
+  padding:0; margin-bottom:40px;
+}
+.shop-header {
+  padding:16px 20px; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+}
+.shop-title { font-size:18px; font-weight:700; color:var(--text); }
+.shop-close { background:transparent; border:1px solid var(--border); color:var(--text-dim); border-radius:6px; padding:6px 12px; cursor:pointer; font-size:12px; font-family:Inter,sans-serif; }
+.shop-close:hover { border-color:var(--red); color:var(--red); }
+.shop-tabs { display:flex; border-bottom:1px solid var(--border); }
+.shop-tab { padding:10px 18px; cursor:pointer; font-size:12px; font-weight:600; color:var(--text-mute); border-bottom:2px solid transparent; transition:all 0.15s; }
+.shop-tab.active { color:var(--teal); border-bottom-color:var(--teal); }
+.shop-body { padding:16px; }
+.shop-section { display:none; }
+.shop-section.active { display:block; }
+.shop-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:10px; }
+.shop-card {
+  background:var(--panel2); border:1px solid var(--border);
+  border-radius:8px; padding:14px; display:flex; flex-direction:column; gap:6px;
+}
+.shop-card.owned { border-color:var(--teal); }
+.shop-card .sc-icon { font-size:24px; }
+.shop-card .sc-name { font-size:13px; font-weight:700; color:var(--text); }
+.shop-card .sc-desc { font-size:11px; color:var(--text-mute); line-height:1.4; flex:1; }
+.shop-card .sc-price { font-size:12px; font-weight:700; color:var(--gold); margin-top:4px; }
+.shop-card .sc-btn {
+  background:var(--teal); color:#0f1923; border:none; border-radius:6px;
+  padding:7px; font-size:11px; font-weight:700; cursor:pointer; font-family:Inter,sans-serif;
+  transition:all 0.12s;
+}
+.shop-card .sc-btn:hover { background:#00c801; }
+.shop-card .sc-btn:disabled { background:var(--border); color:var(--text-mute); cursor:default; }
+.shop-card .sc-btn.owned-btn { background:var(--teal-bg); color:var(--teal); border:1px solid var(--teal-border); cursor:default; }
+
+/* ===== BOT PANEL ===== */
+.bot-panel {
+  background:var(--panel); border:1px solid var(--border);
+  border-radius:var(--radius); padding:12px; margin-bottom:8px;
+  display:flex; align-items:center; gap:12px;
+}
+.bot-avatar { font-size:22px; }
+.bot-info { flex:1; }
+.bot-name { font-size:12px; font-weight:700; }
+.bot-rate { font-size:10px; color:var(--teal); }
+.bot-status { font-size:10px; color:var(--text-mute); }
+.bot-upgrade-btn { background:var(--gold); color:#000; border:none; border-radius:6px; padding:5px 10px; font-size:10px; font-weight:700; cursor:pointer; font-family:Inter,sans-serif; }
+.bot-upgrade-btn:disabled { background:var(--border); color:var(--text-mute); cursor:default; }
+.bot-income-popup {
+  position:fixed; pointer-events:none; z-index:500;
+  font-size:13px; font-weight:700; color:var(--teal);
+  animation:popupFloat 1.4s ease-out forwards;
+}
+@keyframes popupFloat { 0%{opacity:1;transform:translateY(0)} 100%{opacity:0;transform:translateY(-50px)} }
+
+/* ===== COSMETICS ===== */
+.theme-card {
+  background:var(--panel2); border:1px solid var(--border);
+  border-radius:8px; padding:14px; cursor:pointer;
+  transition:all 0.15s;
+}
+.theme-card:hover { border-color:var(--teal); }
+.theme-card.selected { border-color:var(--teal); background:var(--teal-bg); }
+.theme-preview { height:40px; border-radius:4px; margin-bottom:8px; }
+.theme-name { font-size:12px; font-weight:700; color:var(--text); }
+.theme-price { font-size:11px; color:var(--gold); margin-top:2px; }
+
+/* ===== VIP CASINO ===== */
+.vip-door {
+  background:linear-gradient(135deg, #1a0f0a, #2d1810);
+  border:1px solid #8b6914; border-radius:10px;
+  overflow:hidden; position:relative;
+}
+.vip-door::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse at 50% 0%, rgba(245,166,35,0.08) 0%, transparent 70%);
+  pointer-events:none;
+}
+.vip-door .game-header { background:linear-gradient(90deg, #1a0f0a, #2d1810); border-bottom-color:#8b6914; }
+.vip-door .game-name { color:var(--gold); }
+.vip-badge-vip { background:linear-gradient(90deg, #8b6914, #d4a017); color:#1a0f0a; font-size:10px; font-weight:800; padding:3px 8px; border-radius:4px; letter-spacing:1px; }
+.vip-body { padding:30px 20px; text-align:center; }
+.vip-door-icon { font-size:60px; margin-bottom:12px; filter:drop-shadow(0 0 15px rgba(245,166,35,0.5)); }
+.vip-door-title { font-size:18px; font-weight:800; color:var(--gold); margin-bottom:6px; }
+.vip-door-sub { font-size:12px; color:var(--text-mute); margin-bottom:20px; line-height:1.5; }
+.vip-req { display:flex; gap:12px; justify-content:center; margin-bottom:20px; }
+.vip-req-item { background:rgba(245,166,35,0.08); border:1px solid rgba(245,166,35,0.25); border-radius:6px; padding:8px 14px; text-align:center; }
+.vip-req-val { font-size:14px; font-weight:700; color:var(--gold); }
+.vip-req-label { font-size:10px; color:var(--text-mute); margin-top:2px; }
+.vip-pass-wrap { display:flex; gap:8px; justify-content:center; align-items:center; max-width:300px; margin:0 auto; }
+.vip-pass-input { background:var(--panel); border:1px solid #8b6914; color:var(--text); border-radius:6px; padding:9px 12px; font-family:Inter,sans-serif; font-size:13px; flex:1; outline:none; letter-spacing:3px; }
+.vip-enter-btn { background:linear-gradient(90deg, #8b6914, #d4a017); color:#1a0f0a; border:none; border-radius:6px; padding:9px 16px; font-weight:800; font-size:12px; cursor:pointer; font-family:Inter,sans-serif; white-space:nowrap; }
+.vip-enter-btn:hover { filter:brightness(1.15); }
+
+/* ===== VIP CASINO FLOOR ===== */
+.vip-overlay {
+  position:fixed; inset:0; background:#0a0705; z-index:1200;
+  display:none; flex-direction:column;
+}
+.vip-overlay.open { display:flex; }
+.vip-topbar {
+  height:56px; background:#1a0f0a; border-bottom:1px solid #8b6914;
+  display:flex; align-items:center; justify-content:space-between; padding:0 24px;
+  flex-shrink:0;
+}
+.vip-topbar-title { font-size:16px; font-weight:800; color:var(--gold); letter-spacing:1px; }
+.vip-topbar-bal { font-size:14px; font-weight:700; color:var(--gold); }
+.vip-exit-btn { background:transparent; border:1px solid #8b6914; color:#8b6914; border-radius:6px; padding:6px 14px; cursor:pointer; font-size:12px; font-weight:600; font-family:Inter,sans-serif; }
+.vip-exit-btn:hover { border-color:var(--gold); color:var(--gold); }
+.vip-content { padding:20px; overflow-y:auto; flex:1; }
+.vip-games-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(360px,1fr)); gap:14px; }
+.vip-game-panel { background:#1a0f0a; border:1px solid #8b6914; border-radius:10px; overflow:hidden; }
+.vip-game-panel .game-header { background:#1a0f0a; border-bottom-color:#8b6914; }
+.vip-game-panel .game-name { color:var(--gold); }
+.vip-min-label { font-size:10px; color:#8b6914; margin-top:2px; }
 </style>
 </head>
 <body>
 
 <div class="confetti-container" id="confetti"></div>
+
+<!-- HOME PAGE -->
+<div class="home-overlay" id="homeOverlay">
+  <div class="home-bg-glow"></div>
+
+  <div style="width:100%;max-width:900px;padding:24px 20px;overflow-y:auto;display:flex;flex-direction:column;align-items:center;">
+
+    <div class="home-logo-wrap">
+      <div class="home-logo-icon">C</div>
+      <div class="home-logo-name">Crook<span>.</span></div>
+      <div class="home-logo-tag">The Casino That Cheats Back</div>
+    </div>
+
+    <div class="home-tagline">
+      Fake money. Real cheats. Pick a game and start playing — or just enter the lobby.
+    </div>
+
+    <!-- Game selection grid -->
+    <div style="width:100%;margin-bottom:24px;">
+      <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-mute);margin-bottom:10px;text-align:left;">— PICK A GAME TO START —</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;">
+
+        <div class="lobby-card" onclick="enterCasino('game-crash')" style="background:#0f1410;border-color:#1a3d1a;">
+          <div class="lobby-card-icon">🚀</div>
+          <div class="lobby-card-name">Crash</div>
+          <div class="lobby-card-desc">Cash out before it crashes</div>
+          <div class="lobby-card-cheat">⚡ CHEATABLE</div>
+        </div>
+
+        <div class="lobby-card" onclick="enterCasino('game-mines')">
+          <div class="lobby-card-icon">💣</div>
+          <div class="lobby-card-name">Mines</div>
+          <div class="lobby-card-desc">Diamonds or bombs</div>
+          <div class="lobby-card-cheat">⚡ CHEATABLE</div>
+        </div>
+
+        <div class="lobby-card" onclick="enterCasino('game-chicken')">
+          <div class="lobby-card-icon">🐔</div>
+          <div class="lobby-card-name">Chicken Road</div>
+          <div class="lobby-card-desc">Dodge the cars, row by row</div>
+          <div class="lobby-card-cheat">⚡ CHEATABLE</div>
+        </div>
+
+        <div class="lobby-card" onclick="enterCasino('game-plinko')">
+          <div class="lobby-card-icon">🔵</div>
+          <div class="lobby-card-name">Plinko</div>
+          <div class="lobby-card-desc">Drop the ball, hit big multipliers</div>
+          <div class="lobby-card-cheat">⚡ CHEATABLE</div>
+        </div>
+
+        <div class="lobby-card" onclick="enterCasino('game-bj')">
+          <div class="lobby-card-icon">🃏</div>
+          <div class="lobby-card-name">Blackjack</div>
+          <div class="lobby-card-desc">Beat the dealer to 21</div>
+          <div class="lobby-card-cheat">⚡ CHEATABLE</div>
+        </div>
+
+        <div class="lobby-card" onclick="enterCasino('game-roulette')">
+          <div class="lobby-card-icon">⭕</div>
+          <div class="lobby-card-name">Roulette</div>
+          <div class="lobby-card-desc">Single number pays 35:1</div>
+          <div class="lobby-card-cheat">⚡ CHEATABLE</div>
+        </div>
+
+        <div class="lobby-card" onclick="enterCasino('game-poker')">
+          <div class="lobby-card-icon">♠️</div>
+          <div class="lobby-card-name">Texas Hold'em</div>
+          <div class="lobby-card-desc">Poker with Coach Sal</div>
+          <div class="lobby-card-cheat">⚡ CHEATABLE</div>
+        </div>
+
+        <div class="lobby-card" onclick="enterCasino('game-slots')">
+          <div class="lobby-card-icon">🎰</div>
+          <div class="lobby-card-name">Slots</div>
+          <div class="lobby-card-desc">Triple 💎 pays 50×</div>
+          <div class="lobby-card-cheat">⚡ CHEATABLE</div>
+        </div>
+
+        <div class="lobby-card" onclick="enterCasino('game-vp')">
+          <div class="lobby-card-icon">🖥</div>
+          <div class="lobby-card-name">Video Poker</div>
+          <div class="lobby-card-desc">Royal Flush pays 800×</div>
+          <div class="lobby-card-cheat">⚡ CHEATABLE</div>
+        </div>
+
+        <div class="lobby-card" onclick="enterCasino('game-craps')">
+          <div class="lobby-card-icon">🎯</div>
+          <div class="lobby-card-name">Craps</div>
+          <div class="lobby-card-desc">Yo pays 15:1</div>
+          <div class="lobby-card-cheat">⚡ CHEATABLE</div>
+        </div>
+
+        <div class="lobby-card" onclick="enterCasino('game-bacc')">
+          <div class="lobby-card-icon">🎴</div>
+          <div class="lobby-card-name">Baccarat</div>
+          <div class="lobby-card-desc">Tie pays 8:1</div>
+          <div class="lobby-card-cheat">⚡ CHEATABLE</div>
+        </div>
+
+        <div class="lobby-card" onclick="enterCasino('game-coin')">
+          <div class="lobby-card-icon">🪙</div>
+          <div class="lobby-card-name">Coin Flip</div>
+          <div class="lobby-card-desc">Lock the outcome</div>
+          <div class="lobby-card-cheat">⚡ CHEATABLE</div>
+        </div>
+
+        <div class="lobby-card" onclick="enterCasino('game-dice')">
+          <div class="lobby-card-icon">🎲</div>
+          <div class="lobby-card-name">High Roller</div>
+          <div class="lobby-card-desc">Roll over 7 to win</div>
+          <div class="lobby-card-cheat">⚡ CHEATABLE</div>
+        </div>
+
+        <div class="lobby-card" onclick="enterCasino('game-vip-door')" style="border-color:rgba(245,166,35,0.35);background:linear-gradient(135deg,#1a0f0a,#2d1810);">
+          <div class="lobby-card-icon">👑</div>
+          <div class="lobby-card-name" style="color:var(--gold);">VIP Room</div>
+          <div class="lobby-card-desc" style="color:#8b6914;">$100k min — invite only</div>
+          <div class="lobby-card-vip">EXCLUSIVE</div>
+        </div>
+
+      </div>
+    </div>
+
+    <button class="home-enter-btn" onclick="enterCasino('lobby')" style="width:100%;max-width:340px;font-size:14px;padding:13px;">
+      Browse the Lobby →
+    </button>
+
+    <div class="home-stats-bar">
+      <div class="home-stat"><div class="home-stat-val">13</div><div class="home-stat-label">Games</div></div>
+      <div class="home-stat"><div class="home-stat-val">$1,000</div><div class="home-stat-label">Starting Stack</div></div>
+      <div class="home-stat"><div class="home-stat-val">∞</div><div class="home-stat-label">Ways to Cheat</div></div>
+      <div class="home-stat"><div class="home-stat-val">👑</div><div class="home-stat-label">VIP Room</div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Level-Up Toast -->
+<div class="levelup-toast" id="levelupToast">
+  <div class="lt-title">⬆ Level Up!</div>
+  <div class="lt-level">Level <span id="ltLevel">2</span></div>
+  <div class="lt-unlocked" id="ltUnlocked"></div>
+</div>
+
+<!-- Shop Overlay -->
+<div class="shop-overlay" id="shopOverlay" onclick="if(event.target===this)closeShop()">
+  <div class="shop-modal">
+    <div class="shop-header">
+      <div class="shop-title">🛒 The Crook Shop</div>
+      <button class="shop-close" onclick="closeShop()">✕ Close</button>
+    </div>
+    <div class="shop-tabs">
+      <div class="shop-tab active" onclick="switchShopTab('bots')">🤖 Bots</div>
+      <div class="shop-tab" onclick="switchShopTab('perks')">⚡ Perks</div>
+      <div class="shop-tab" onclick="switchShopTab('cosmetics')">🎨 Cosmetics</div>
+    </div>
+    <div class="shop-body">
+
+      <!-- BOTS TAB -->
+      <div class="shop-section active" id="shopTab-bots">
+        <p style="font-size:11px;color:var(--text-mute);margin-bottom:12px;">Bots auto-play in the background and deposit earnings every few seconds. Upgrade them to earn more.</p>
+        <div class="shop-grid" id="botShopGrid">
+          <!-- filled by JS -->
+        </div>
+        <div style="margin-top:16px;">
+          <div style="font-size:11px;font-weight:700;color:var(--text-dim);margin-bottom:8px;">YOUR BOTS</div>
+          <div id="activeBotsList">
+            <div style="font-size:11px;color:var(--text-mute);">No bots yet. Buy one above!</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PERKS TAB -->
+      <div class="shop-section" id="shopTab-perks">
+        <p style="font-size:11px;color:var(--text-mute);margin-bottom:12px;">Permanent upgrades for this session. Each perk can only be bought once.</p>
+        <div class="shop-grid" id="perkShopGrid">
+          <!-- filled by JS -->
+        </div>
+      </div>
+
+      <!-- COSMETICS TAB -->
+      <div class="shop-section" id="shopTab-cosmetics">
+        <p style="font-size:11px;color:var(--text-mute);margin-bottom:12px;">Change how the casino looks. Themes apply instantly.</p>
+        <div class="shop-grid" id="cosmeticShopGrid">
+          <!-- filled by JS -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- VIP Casino Overlay -->
+<div class="vip-overlay" id="vipOverlay">
+  <div class="vip-topbar">
+    <div class="vip-topbar-title">👑 THE INNER SANCTUM</div>
+    <div class="vip-topbar-bal">💰 $<span id="vipBalance">0</span></div>
+    <button class="vip-exit-btn" onclick="closeVip()">← Leave</button>
+  </div>
+  <div class="vip-content">
+    <div class="vip-games-grid">
+
+      <!-- VIP Roulette -->
+      <div class="vip-game-panel">
+        <div class="game-header">
+          <div class="game-name"><div class="game-icon">⭕</div>High Stakes Roulette</div>
+          <span class="game-badge badge-cheat">⚡ CHEATABLE</span>
+        </div>
+        <div class="game-body">
+          <div class="vip-min-label">Min bet: $1,000 · Max bet: $100,000</div>
+          <div id="vipRouletteWheel" style="margin:10px 0;font-size:40px;text-align:center;">🎡</div>
+          <div class="bet-grid" id="vipBetGrid"></div>
+          <div class="score-row" style="margin-top:10px;">
+            <span class="bet-label">BET</span>
+            <div class="bet-input-wrap"><input class="stake-input" type="number" id="vipRouletteBet" value="5000" min="1000" max="100000"></div>
+            <button class="all-in-btn" onclick="setAllIn('vipRouletteBet')">ALL IN</button>
+          </div>
+          <button class="stake-btn" onclick="vipSpinRoulette()">🎡 Spin</button>
+          <div class="cheat-panel" id="vipRouletteCheatPanel">
+            <button class="cheat-opt" onclick="vipRouletteCheat('pick')">🎯 Land on Pick (3⚡)</button>
+            <button class="cheat-opt" onclick="vipRouletteCheat('red')">🔴 Force Red (2⚡)</button>
+            <button class="cheat-opt" onclick="vipRouletteCheat('black')">⚫ Force Black (2⚡)</button>
+          </div>
+          <button class="cheat-toggle-btn" onclick="toggleCheat('vipRouletteCheatPanel')">⚡ Cheat</button>
+          <div class="msg-box" id="vipRouletteMsg"></div>
+        </div>
+      </div>
+
+      <!-- VIP Blackjack -->
+      <div class="vip-game-panel">
+        <div class="game-header">
+          <div class="game-name"><div class="game-icon">🃏</div>Diamond Blackjack</div>
+          <span class="game-badge badge-cheat">⚡ CHEATABLE</span>
+        </div>
+        <div class="game-body">
+          <div class="vip-min-label">Min bet: $1,000 · Max bet: $100,000</div>
+          <div class="score-row">
+            <span class="bet-label">BET</span>
+            <div class="bet-input-wrap"><input class="stake-input" type="number" id="vipBjBet" value="5000" min="1000" max="100000"></div>
+            <button class="all-in-btn" onclick="setAllIn('vipBjBet')">ALL IN</button>
+          </div>
+          <div id="vipBjArea" style="min-height:160px;"></div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <button class="stake-btn" id="vipBjDealBtn" onclick="vipBjDeal()" style="flex:1;">🃏 Deal</button>
+            <button class="stake-btn" id="vipBjHitBtn" onclick="vipBjHit()" disabled style="flex:1;">Hit</button>
+            <button class="stake-btn" id="vipBjStandBtn" onclick="vipBjStand()" disabled style="flex:1;">Stand</button>
+          </div>
+          <div class="cheat-panel" id="vipBjCheatPanel">
+            <button class="cheat-opt" onclick="vipBjCheat('peek')">👁 Peek Dealer (2⚡)</button>
+            <button class="cheat-opt" onclick="vipBjCheat('bj')">♠ Force Blackjack (3⚡)</button>
+            <button class="cheat-opt" onclick="vipBjCheat('bust')">💥 Bust Dealer (3⚡)</button>
+          </div>
+          <button class="cheat-toggle-btn" onclick="toggleCheat('vipBjCheatPanel')">⚡ Cheat</button>
+          <div class="msg-box" id="vipBjMsg"></div>
+        </div>
+      </div>
+
+      <!-- VIP Crash -->
+      <div class="vip-game-panel" style="grid-column:1/-1;">
+        <div class="game-header">
+          <div class="game-name"><div class="game-icon">🚀</div>Mega Crash</div>
+          <span class="game-badge badge-cheat">⚡ CHEATABLE</span>
+        </div>
+        <div class="game-body">
+          <div class="vip-min-label">Min bet: $5,000 · Max bet: $500,000</div>
+          <canvas id="vipCrashCanvas" width="700" height="200" style="width:100%;display:block;background:#0f1411;border:1px solid #8b6914;border-radius:8px;margin-bottom:8px;"></canvas>
+          <div style="text-align:center;margin-bottom:8px;">
+            <span style="font-size:32px;font-weight:800;color:var(--gold);" id="vipCrashMult">1.00×</span>
+          </div>
+          <div class="score-row">
+            <span class="bet-label">BET</span>
+            <div class="bet-input-wrap"><input class="stake-input" type="number" id="vipCrashBet" value="10000" min="5000" max="500000"></div>
+            <button class="all-in-btn" onclick="setAllIn('vipCrashBet')">ALL IN</button>
+            <span class="bet-label">AUTO</span>
+            <div class="bet-input-wrap"><input class="stake-input" type="number" id="vipCrashAuto" value="3" min="1.1" max="100" step="0.1" style="width:70px;"></div>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <button class="stake-btn" id="vipCrashBetBtn" onclick="vipCrashBet()" style="flex:1;">🚀 Bet &amp; Launch</button>
+            <button class="stake-btn" id="vipCrashCOBtn" onclick="vipCrashCashout()" disabled style="flex:1;background:var(--gold);color:#000;">💸 Cash Out</button>
+          </div>
+          <div class="cheat-panel" id="vipCrashCheatPanel">
+            <button class="cheat-opt" onclick="vipCrashCheat('5x')">🎯 Guarantee 5× (3⚡)</button>
+            <button class="cheat-opt" onclick="vipCrashCheat('10x')">🎯 Guarantee 10× (5⚡)</button>
+            <button class="cheat-opt" onclick="vipCrashCheat('peek')">👁 Peek Crash Point (2⚡)</button>
+          </div>
+          <button class="cheat-toggle-btn" onclick="toggleCheat('vipCrashCheatPanel')">⚡ Cheat</button>
+          <div class="msg-box" id="vipCrashMsg"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
 
 <!-- Kicked Out Overlay -->
 <div class="kicked-overlay" id="kickedOverlay">
@@ -761,21 +1412,39 @@ body {
     </div>
   </div>
 
+  <!-- XP / Level Widget -->
+  <div class="xp-widget">
+    <div class="xp-top">
+      <div class="xp-level">LVL <span id="xpLevel">1</span></div>
+      <div class="xp-title" id="xpTitle">Rookie</div>
+    </div>
+    <div class="xp-track"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
+    <div class="xp-label"><span id="xpCurrent">0</span> / <span id="xpNext">100</span> XP</div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Lobby</div>
+    <div class="nav-item" id="nav-casino-select" onclick="showPage('casino-select')"><span class="icon">🏛</span><span>Casinos</span></div>
+    <div class="nav-item" id="nav-lobby" onclick="showPage('lobby')"><span class="icon">🏠</span><span>Home</span></div>
+    <div class="nav-item" onclick="openShop()"><span class="icon">🛒</span><span>Shop</span><span class="nav-badge" id="shopNotifBadge" style="display:none">NEW</span></div>
+    <div class="nav-item" onclick="showPage('game-vip-door')"><span class="icon">👑</span><span>VIP Room</span></div>
+  </div>
+
   <div class="sidebar-section">
     <div class="sidebar-label">Games</div>
-    <div class="nav-item active" onclick="scrollTo(0,0)"><span class="icon">🎰</span><span>Slots</span></div>
-    <div class="nav-item" onclick="document.getElementById('game-coin').scrollIntoView({behavior:'smooth'})"><span class="icon">🪙</span><span>Coin Flip</span></div>
-    <div class="nav-item" onclick="document.getElementById('game-dice').scrollIntoView({behavior:'smooth'})"><span class="icon">🎲</span><span>High Roller</span></div>
-    <div class="nav-item" onclick="document.getElementById('game-bj').scrollIntoView({behavior:'smooth'})"><span class="icon">🃏</span><span>Blackjack</span></div>
-    <div class="nav-item" onclick="document.getElementById('game-roulette').scrollIntoView({behavior:'smooth'})"><span class="icon">⭕</span><span>Roulette</span></div>
-    <div class="nav-item" onclick="document.getElementById('game-bacc').scrollIntoView({behavior:'smooth'})"><span class="icon">🎴</span><span>Baccarat</span></div>
-    <div class="nav-item" onclick="document.getElementById('game-craps').scrollIntoView({behavior:'smooth'})"><span class="icon">🎯</span><span>Craps</span></div>
-    <div class="nav-item" onclick="document.getElementById('game-vp').scrollIntoView({behavior:'smooth'})"><span class="icon">🖥</span><span>Video Poker</span></div>
-    <div class="nav-item" onclick="document.getElementById('game-poker').scrollIntoView({behavior:'smooth'})"><span class="icon">♠️</span><span>Texas Hold'em</span></div>
-    <div class="nav-item" onclick="document.getElementById('game-crash').scrollIntoView({behavior:'smooth'})"><span class="icon">🚀</span><span>Crash</span></div>
-    <div class="nav-item" onclick="document.getElementById('game-mines').scrollIntoView({behavior:'smooth'})"><span class="icon">💣</span><span>Mines</span></div>
-    <div class="nav-item" onclick="document.getElementById('game-plinko').scrollIntoView({behavior:'smooth'})"><span class="icon">🔵</span><span>Plinko</span></div>
-    <div class="nav-item" onclick="document.getElementById('game-chicken').scrollIntoView({behavior:'smooth'})"><span class="icon">🐔</span><span>Chicken</span></div>
+    <div class="nav-item" id="nav-game-slots"   onclick="showPage('game-slots')"><span class="icon">🎰</span><span>Slots</span></div>
+    <div class="nav-item" id="nav-game-coin"    onclick="showPage('game-coin')"><span class="icon">🪙</span><span>Coin Flip</span></div>
+    <div class="nav-item" id="nav-game-dice"    onclick="showPage('game-dice')"><span class="icon">🎲</span><span>High Roller</span></div>
+    <div class="nav-item" id="nav-game-bj"      onclick="showPage('game-bj')"><span class="icon">🃏</span><span>Blackjack</span></div>
+    <div class="nav-item" id="nav-game-roulette" onclick="showPage('game-roulette')"><span class="icon">⭕</span><span>Roulette</span></div>
+    <div class="nav-item" id="nav-game-bacc"    onclick="showPage('game-bacc')"><span class="icon">🎴</span><span>Baccarat</span></div>
+    <div class="nav-item" id="nav-game-craps"   onclick="showPage('game-craps')"><span class="icon">🎯</span><span>Craps</span></div>
+    <div class="nav-item" id="nav-game-vp"      onclick="showPage('game-vp')"><span class="icon">🖥</span><span>Video Poker</span></div>
+    <div class="nav-item" id="nav-game-poker"   onclick="showPage('game-poker')"><span class="icon">♠️</span><span>Texas Hold'em</span></div>
+    <div class="nav-item" id="nav-game-crash"   onclick="showPage('game-crash')"><span class="icon">🚀</span><span>Crash</span></div>
+    <div class="nav-item" id="nav-game-mines"   onclick="showPage('game-mines')"><span class="icon">💣</span><span>Mines</span></div>
+    <div class="nav-item" id="nav-game-plinko"  onclick="showPage('game-plinko')"><span class="icon">🔵</span><span>Plinko</span></div>
+    <div class="nav-item" id="nav-game-chicken" onclick="showPage('game-chicken')"><span class="icon">🐔</span><span>Chicken</span></div>
   </div>
 
   <div class="sidebar-balance">
@@ -792,8 +1461,8 @@ body {
   <div class="topbar">
     <div class="topbar-left">
       <div>
-        <div class="page-title">Casino Floor</div>
-        <div class="page-sub">13 games available</div>
+        <div class="page-title" id="topbarTitle">Casino Floor</div>
+        <div class="page-sub" id="topbarSub">Select a game from the sidebar</div>
       </div>
     </div>
     <div class="topbar-right">
@@ -816,6 +1485,173 @@ body {
     </div>
 
     <div class="games-grid">
+
+      <!-- CASINO SELECT -->
+      <div id="casino-select">
+        <div class="lobby-greeting">
+          <h2>Choose a Casino 🏛</h2>
+          <p>Two floors, two very different vibes. Pick your table.</p>
+        </div>
+
+        <div class="casino-select-grid">
+
+          <!-- Crook Casino -->
+          <div class="casino-card" onclick="showPage('lobby')" style="background:var(--panel);border:1px solid var(--border);">
+            <div class="casino-card-banner" style="background:linear-gradient(135deg,#0f1923,#1a3d2a);">
+              <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 60%,rgba(0,231,1,0.12),transparent 70%);"></div>
+              <div class="casino-card-banner-icon">🎰</div>
+            </div>
+            <div class="casino-card-body" style="background:var(--panel);">
+              <div class="casino-card-name" style="color:var(--teal);">Crook Casino</div>
+              <div class="casino-card-sub">The main floor. 13 games, all cheatable. Starts you off with $1,000 and lets you work your way up — or get thrown out trying.</div>
+              <div class="casino-card-tags">
+                <span class="casino-card-tag" style="background:var(--cheat-bg);color:var(--cheat-glow);border:1px solid rgba(168,85,247,0.3);">⚡ ALL CHEATABLE</span>
+                <span class="casino-card-tag" style="background:var(--teal-bg);color:var(--teal);border:1px solid var(--teal-border);">13 GAMES</span>
+                <span class="casino-card-tag" style="background:rgba(255,255,255,0.05);color:var(--text-mute);border:1px solid var(--border);">$1,000 START</span>
+              </div>
+              <button class="casino-card-enter" style="background:var(--teal);color:#0f1923;">Enter Crook Casino →</button>
+            </div>
+          </div>
+
+          <!-- High Roller Room -->
+          <div class="casino-card" onclick="showPage('game-vip-door')" style="background:#1a0f0a;border:1px solid #8b6914;">
+            <div class="casino-card-banner" style="background:linear-gradient(135deg,#1a0f0a,#3d2a00);">
+              <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 60%,rgba(245,166,35,0.15),transparent 70%);"></div>
+              <div class="casino-card-banner-icon">👑</div>
+              <div class="casino-card-locked-banner">🔒 INVITE ONLY</div>
+            </div>
+            <div class="casino-card-body" style="background:#1a0f0a;">
+              <div class="casino-card-name" style="color:var(--gold);">The Inner Sanctum</div>
+              <div class="casino-card-sub" style="color:#8b6914;">High stakes tables behind a locked door. You'll need $100,000 in your account and the right password to get in. The games don't mess around.</div>
+              <div class="casino-card-tags">
+                <span class="casino-card-tag" style="background:rgba(245,166,35,0.1);color:var(--gold);border:1px solid rgba(245,166,35,0.3);">👑 VIP ONLY</span>
+                <span class="casino-card-tag" style="background:rgba(245,166,35,0.08);color:#8b6914;border:1px solid rgba(139,105,20,0.3);">$100K MINIMUM</span>
+                <span class="casino-card-tag" style="background:rgba(245,166,35,0.08);color:#8b6914;border:1px solid rgba(139,105,20,0.3);">3 EXCLUSIVE GAMES</span>
+              </div>
+              <button class="casino-card-enter" style="background:linear-gradient(90deg,#8b6914,#d4a017);color:#1a0f0a;">Try to Enter →</button>
+            </div>
+          </div>
+
+        </div>
+
+        <div style="margin-top:28px;padding:16px;background:var(--panel);border:1px solid var(--border);border-radius:10px;">
+          <div style="font-size:11px;font-weight:700;color:var(--text-dim);margin-bottom:6px;">💡 How to unlock the VIP Room</div>
+          <div style="font-size:11px;color:var(--text-mute);line-height:1.7;">
+            1. Build your bankroll to <span style="color:var(--gold);">$100,000</span> playing on the main floor.<br>
+            2. Reach <span style="color:var(--gold);">Level 20</span> in the progression system — a hint drops in your level-up toast.<br>
+            3. The password is earned, not given. Keep playing.<br>
+            <span style="color:rgba(255,255,255,0.15);font-size:10px;user-select:none;">················· JACKPOT ·················</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CASINO LOBBY -->
+      <div id="casino-lobby" class="page-active">
+        <div class="lobby-greeting">
+          <h2>Welcome to Crook Casino 🎰</h2>
+          <p>Pick a game below or use the sidebar. Every game has cheats — use them wisely.</p>
+        </div>
+
+        <div class="lobby-section-title">Stake Originals</div>
+        <div class="lobby-grid">
+          <div class="lobby-card" onclick="showPage('game-crash')">
+            <div class="lobby-card-icon">🚀</div>
+            <div class="lobby-card-name">Crash</div>
+            <div class="lobby-card-desc">Watch the multiplier climb. Cash out before it crashes.</div>
+            <div class="lobby-card-cheat">⚡ CHEATABLE</div>
+          </div>
+          <div class="lobby-card" onclick="showPage('game-mines')">
+            <div class="lobby-card-icon">💣</div>
+            <div class="lobby-card-name">Mines</div>
+            <div class="lobby-card-desc">Reveal diamonds, avoid bombs. The deeper you go, the bigger the payout.</div>
+            <div class="lobby-card-cheat">⚡ CHEATABLE</div>
+          </div>
+          <div class="lobby-card" onclick="showPage('game-plinko')">
+            <div class="lobby-card-icon">🔵</div>
+            <div class="lobby-card-name">Plinko</div>
+            <div class="lobby-card-desc">Drop a ball through pegs. Land in high multiplier buckets.</div>
+            <div class="lobby-card-cheat">⚡ CHEATABLE</div>
+          </div>
+          <div class="lobby-card" onclick="showPage('game-chicken')">
+            <div class="lobby-card-icon">🐔</div>
+            <div class="lobby-card-name">Chicken Road</div>
+            <div class="lobby-card-desc">Cross the road. Dodge the cars. Cash out or risk it all.</div>
+            <div class="lobby-card-cheat">⚡ CHEATABLE</div>
+          </div>
+        </div>
+
+        <div class="lobby-section-title">Table Games</div>
+        <div class="lobby-grid">
+          <div class="lobby-card" onclick="showPage('game-bj')">
+            <div class="lobby-card-icon">🃏</div>
+            <div class="lobby-card-name">Blackjack</div>
+            <div class="lobby-card-desc">Beat the dealer to 21. Peek cards, force a blackjack, or bust the dealer.</div>
+            <div class="lobby-card-cheat">⚡ CHEATABLE</div>
+          </div>
+          <div class="lobby-card" onclick="showPage('game-roulette')">
+            <div class="lobby-card-icon">⭕</div>
+            <div class="lobby-card-name">Roulette</div>
+            <div class="lobby-card-desc">Spin the wheel. Single number pays 35:1. Force your pick with cheats.</div>
+            <div class="lobby-card-cheat">⚡ CHEATABLE</div>
+          </div>
+          <div class="lobby-card" onclick="showPage('game-poker')">
+            <div class="lobby-card-icon">♠️</div>
+            <div class="lobby-card-name">Texas Hold'em</div>
+            <div class="lobby-card-desc">5-player poker with Coach Sal advising you on the side.</div>
+            <div class="lobby-card-cheat">⚡ CHEATABLE</div>
+          </div>
+          <div class="lobby-card" onclick="showPage('game-bacc')">
+            <div class="lobby-card-icon">🎴</div>
+            <div class="lobby-card-name">Baccarat</div>
+            <div class="lobby-card-desc">Player, Banker, or Tie. Closest to 9 wins. Tie pays 8:1.</div>
+            <div class="lobby-card-cheat">⚡ CHEATABLE</div>
+          </div>
+          <div class="lobby-card" onclick="showPage('game-craps')">
+            <div class="lobby-card-icon">🎯</div>
+            <div class="lobby-card-name">Craps</div>
+            <div class="lobby-card-desc">Pass line, field bets, Yo at 15:1. Load the dice to any total.</div>
+            <div class="lobby-card-cheat">⚡ CHEATABLE</div>
+          </div>
+          <div class="lobby-card" onclick="showPage('game-vp')">
+            <div class="lobby-card-icon">🖥</div>
+            <div class="lobby-card-name">Video Poker</div>
+            <div class="lobby-card-desc">Jacks or Better draw poker. Royal Flush pays 800×.</div>
+            <div class="lobby-card-cheat">⚡ CHEATABLE</div>
+          </div>
+        </div>
+
+        <div class="lobby-section-title">Quick Games</div>
+        <div class="lobby-grid">
+          <div class="lobby-card" onclick="showPage('game-slots')">
+            <div class="lobby-card-icon">🎰</div>
+            <div class="lobby-card-name">Lucky Reels</div>
+            <div class="lobby-card-desc">Spin the slots. Triple 💎 pays 50×. Force a jackpot with cheats.</div>
+            <div class="lobby-card-cheat">⚡ CHEATABLE</div>
+          </div>
+          <div class="lobby-card" onclick="showPage('game-coin')">
+            <div class="lobby-card-icon">🪙</div>
+            <div class="lobby-card-name">Coin Flip</div>
+            <div class="lobby-card-desc">Heads or tails. Lock the outcome before the flip.</div>
+            <div class="lobby-card-cheat">⚡ CHEATABLE</div>
+          </div>
+          <div class="lobby-card" onclick="showPage('game-dice')">
+            <div class="lobby-card-icon">🎲</div>
+            <div class="lobby-card-name">High Roller Dice</div>
+            <div class="lobby-card-desc">Roll over 7. Load the dice to guarantee your number.</div>
+            <div class="lobby-card-cheat">⚡ CHEATABLE</div>
+          </div>
+        </div>
+
+        <div class="lobby-section-title">Exclusive</div>
+        <div class="lobby-grid">
+          <div class="lobby-card" onclick="showPage('game-vip-door')" style="border-color:rgba(245,166,35,0.3);background:linear-gradient(135deg,#1a0f0a,#2d1810);">
+            <div class="lobby-card-icon">👑</div>
+            <div class="lobby-card-name" style="color:var(--gold);">The Inner Sanctum</div>
+            <div class="lobby-card-desc" style="color:#8b6914;">High stakes tables. $100k minimum. Invite only.</div>
+            <div class="lobby-card-vip">VIP ONLY</div>
+          </div>
+        </div>
+      </div>
 
       <!-- SLOTS -->
       <div class="game-panel" id="game-slots">
@@ -1352,6 +2188,40 @@ body {
           <div class="history-log" id="chickenLog"></div>
         </div>
       </div>
+
+      <!-- VIP DOOR -->
+      <div class="vip-door full-width" id="game-vip-door" style="margin-top:12px;">
+        <div class="game-header">
+          <div class="game-name"><div class="game-icon">👑</div>The Inner Sanctum</div>
+          <span class="vip-badge-vip">VIP ONLY</span>
+        </div>
+        <div class="vip-body">
+          <div class="vip-door-icon">🚪</div>
+          <div class="vip-door-title">High Roller Room</div>
+          <div class="vip-door-sub">Exclusive tables. Minimum $100,000 bankroll.<br>Invite only. You know the code.</div>
+          <div class="vip-req">
+            <div class="vip-req-item">
+              <div class="vip-req-val" id="vipReqBalance">$0</div>
+              <div class="vip-req-label">Your Bankroll</div>
+            </div>
+            <div class="vip-req-item">
+              <div class="vip-req-val" style="color:var(--gold);">$100,000</div>
+              <div class="vip-req-label">Minimum Required</div>
+            </div>
+            <div class="vip-req-item">
+              <div class="vip-req-val" id="vipReqLevel">Lv.1</div>
+              <div class="vip-req-label">Your Level</div>
+            </div>
+          </div>
+          <div class="vip-pass-wrap">
+            <input class="vip-pass-input" type="password" id="vipPassword" placeholder="••••••••" maxlength="16" onkeydown="if(event.key==='Enter')tryEnterVip()">
+            <button class="vip-enter-btn" onclick="tryEnterVip()">ENTER →</button>
+          </div>
+          <div class="msg-box" id="vipDoorMsg" style="max-width:300px;margin:10px auto 0;"></div>
+        </div>
+      </div>
+
+  </div><!-- end games-grid -->
   </div><!-- end content -->
 </div><!-- end main -->
 
@@ -1359,6 +2229,16 @@ body {
 <div class="stats-hud" id="statsHud">
   <div class="stats-hud-title">📊 Session</div>
   <div class="stat-row"><span class="stat-label">Bankroll</span><span class="stat-val stat-win" id="statBankroll">$1,000</span></div>
+  <hr class="hud-divider">
+  <div class="stat-row"><span class="stat-label">Level</span><span class="stat-val" style="color:var(--gold)" id="statLevel">1</span></div>
+  <div class="stat-row"><span class="stat-label">Title</span><span class="stat-val" style="color:var(--gold);font-size:9px;" id="statTitle">Rookie</span></div>
+  <div class="stat-row" style="align-items:center;gap:6px;">
+    <span class="stat-label">XP</span>
+    <div style="flex:1;height:4px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden;">
+      <div id="statXpFill" style="height:100%;background:var(--gold);width:0%;transition:width 0.4s;"></div>
+    </div>
+    <span class="stat-val" style="color:var(--gold);font-size:9px;" id="statXpVal">0</span>
+  </div>
   <hr class="hud-divider">
   <div class="stat-row"><span class="stat-label">Wins</span><span class="stat-val stat-win" id="statWins">0</span></div>
   <div class="stat-row"><span class="stat-label">Losses</span><span class="stat-val stat-lose" id="statLosses">0</span></div>
@@ -1371,6 +2251,70 @@ body {
 </div>
 
 <script>
+
+// ===== HOME PAGE & PAGE ROUTER =====
+const PAGE_TITLES = {
+  'casino-select':['Casinos',         'Choose your floor'],
+  'lobby':        ['Casino Floor',    'Select a game from the sidebar'],
+  'game-slots':   ['Lucky Reels',     'Slots — Triple 💎 pays 50×'],
+  'game-coin':    ['Coin Flip',       'Heads or tails — 2× payout'],
+  'game-dice':    ['High Roller Dice','Roll over 7 to win'],
+  'game-bj':      ['Blackjack',       'Beat the dealer to 21'],
+  'game-roulette':['Roulette',        'Single number pays 35:1'],
+  'game-bacc':    ['Baccarat',        'Closest to 9 wins — Tie pays 8:1'],
+  'game-craps':   ['Craps',           'Pass line, field bets, Yo at 15:1'],
+  'game-vp':      ['Video Poker',     'Jacks or Better — Royal Flush 800×'],
+  'game-poker':   ["Texas Hold'em",   'Full poker with Coach Sal'],
+  'game-crash':   ['Crash',           'Cash out before the multiplier crashes'],
+  'game-mines':   ['Mines',           'Reveal diamonds, avoid bombs'],
+  'game-plinko':  ['Plinko',          'Drop the ball — hit the high multipliers'],
+  'game-chicken': ['Chicken Road',    'Cross the road without hitting a car'],
+  'game-vip-door':['VIP Room',        '$100k minimum — invite only'],
+};
+
+function showPage(pageId) {
+  // Hide all top-level pages and game panels
+  ['casino-lobby', 'casino-select'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('page-active');
+  });
+  document.querySelectorAll('.games-grid .game-panel').forEach(p => p.classList.remove('page-active'));
+
+  // Clear all nav active states
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+  // Show target — lobby and casino-select are special non-game-panel pages
+  if (pageId === 'lobby' || pageId === 'casino-select') {
+    const el = document.getElementById(pageId === 'lobby' ? 'casino-lobby' : 'casino-select');
+    if (el) el.classList.add('page-active');
+  } else {
+    const panel = document.getElementById(pageId);
+    if (panel) panel.classList.add('page-active');
+  }
+  const navItem = document.getElementById('nav-' + pageId);
+  if (navItem) navItem.classList.add('active');
+
+  // Update topbar
+  const info = PAGE_TITLES[pageId] || ['Casino Floor', ''];
+  const titleEl = document.getElementById('topbarTitle');
+  const subEl   = document.getElementById('topbarSub');
+  if (titleEl) titleEl.textContent = info[0];
+  if (subEl)   subEl.textContent   = info[1];
+
+  // Scroll top of content
+  const content = document.querySelector('.content');
+  if (content) content.scrollTop = 0;
+  window.scrollTo(0, 0);
+}
+
+function enterCasino(pageId) {
+  const overlay = document.getElementById('homeOverlay');
+  overlay.classList.add('fade-out');
+  setTimeout(() => {
+    overlay.style.display = 'none';
+    showPage(pageId || 'lobby');
+  }, 650);
+}
 
 // ===== STATE =====
 let balance = 1000;
@@ -1408,15 +2352,18 @@ function useCheat(cost = 1) {
 }
 
 function gainCheat(amount = 0.5) {
-  cheatEnergy = Math.min(MAX_CHEAT, cheatEnergy + amount);
+  const actual = perkRechargeDouble ? amount * 2 : amount;
+  const cap = MAX_CHEAT_CAP || MAX_CHEAT;
+  cheatEnergy = Math.min(cap, cheatEnergy + actual);
   updateCheatMeter();
   updateStatsHud();
 }
 
 function updateCheatMeter() {
-  const pct = (cheatEnergy / MAX_CHEAT) * 100;
+  const cap = MAX_CHEAT_CAP || MAX_CHEAT;
+  const pct = (cheatEnergy / cap) * 100;
   document.getElementById('cheatMeter').style.width = pct + '%';
-  document.getElementById('cheatEnergy').textContent = cheatEnergy.toFixed(1) + ' / ' + MAX_CHEAT;
+  document.getElementById('cheatEnergy').textContent = cheatEnergy.toFixed(1) + ' / ' + cap;
 }
 
 function toggleCheat(id) {
@@ -1463,6 +2410,17 @@ function resetGame() {
   cheatEnergy = 10;
   stats = { wins: 0, losses: 0, cheats: 0, moneyWon: 0, moneyLost: 0 };
   kicked = false;
+
+  // Reset progression
+  playerXP = 0; playerLevel = 1;
+  shopState = { bots:{}, perks:{}, cosmetic:'default', purchasedCosmetics:{default:true} };
+  MAX_CHEAT_CAP = 10; perkRechargeDouble = false; perkBetterOdds = false; perkHighRollerBonus = false;
+  Object.values(botIntervals).forEach(clearInterval); botIntervals = {};
+  applyTheme('default');
+  updateXPBar();
+  // Close VIP if open
+  const vipOv = safeEl('vipOverlay'); if (vipOv) vipOv.classList.remove('open');
+  const shopOv = safeEl('shopOverlay'); if (shopOv) shopOv.classList.remove('open');
 
   // Reset crash
   crashState = 'idle'; crashCheatMin = 0;
@@ -3166,17 +4124,21 @@ const kickMessages = [
 function recordWin(amount) {
   stats.wins++;
   stats.moneyWon += amount;
+  gainXP(Math.max(1, Math.floor(amount / 100)));
+  updateVipBalance();
   updateStatsHud();
 }
 
 function recordLoss(amount) {
   stats.losses++;
   stats.moneyLost += amount;
+  gainXP(Math.max(1, Math.floor(amount / 400)));
   updateStatsHud();
 }
 
 function recordCheat() {
   stats.cheats++;
+  gainXP(3);
   updateStatsHud();
   checkKickThreshold();
 }
@@ -3184,6 +4146,17 @@ function recordCheat() {
 function updateStatsHud() {
   const set = (id, val) => { const e = safeEl(id); if (e) e.textContent = val; };
   set('statBankroll', '$' + balance.toLocaleString());
+  // XP / level in HUD
+  set('statLevel', playerLevel);
+  const hudTitle = XP_TITLES[Math.min(Math.floor((playerLevel - 1) / 3), XP_TITLES.length - 1)];
+  set('statTitle', hudTitle);
+  const lvlThresh = XP_THRESHOLDS[playerLevel - 1] || 0;
+  const nxtThresh = XP_THRESHOLDS[playerLevel] || XP_THRESHOLDS[playerLevel - 1] + 1;
+  const xpCur = playerXP - lvlThresh;
+  const xpRange = nxtThresh - lvlThresh;
+  const xpPct = Math.min(100, xpRange > 0 ? (xpCur / xpRange) * 100 : 100);
+  const xpFill = safeEl('statXpFill'); if (xpFill) xpFill.style.width = xpPct + '%';
+  set('statXpVal', playerXP.toLocaleString());
   set('statWins', stats.wins);
   set('statLosses', stats.losses);
   set('statCheats', stats.cheats);
@@ -4061,17 +5034,711 @@ function chickenCheatAutoRun() {
   setMsg('chickenMsg','⚡ Auto-running 5 rows safely!','cheat-msg');
 }
 
+// ===== XP / LEVEL PROGRESSION =====
+const XP_TITLES = [
+  'Rookie','Hustler','Card Shark','High Roller','Big Spender',
+  'Risk Taker','Lucky Dog','House Favorite','The Whale','The House'
+];
+const XP_THRESHOLDS = [0,100,250,450,700,1000,1400,1900,2500,3200,4000,5000,
+  6200,7600,9200,11000,13000,15500,18500,22000,26000,31000,37000,44000,52000,61000];
+
+let playerXP = 0;
+let playerLevel = 1;
+
+function gainXP(amount) {
+  playerXP += Math.floor(amount);
+  const maxLevel = XP_THRESHOLDS.length;
+  while (playerLevel < maxLevel && playerXP >= XP_THRESHOLDS[playerLevel]) {
+    playerLevel++;
+    showLevelUp(playerLevel);
+  }
+  updateXPBar();
+}
+
+function updateXPBar() {
+  const lvl = playerLevel;
+  const maxLevel = XP_THRESHOLDS.length;
+  const cur = playerXP - XP_THRESHOLDS[lvl - 1];
+  const next = lvl < maxLevel ? XP_THRESHOLDS[lvl] - XP_THRESHOLDS[lvl - 1] : 0;
+  const pct = next > 0 ? Math.min(100, (cur / next) * 100) : 100;
+  const title = XP_TITLES[Math.min(Math.floor((lvl - 1) / 3), XP_TITLES.length - 1)];
+
+  const setEl = (id, val) => { const e = safeEl(id); if (e) e.textContent = val; };
+  setEl('xpLevel', lvl);
+  setEl('xpTitle', title);
+  setEl('xpCurrent', cur.toLocaleString());
+  setEl('xpNext', next > 0 ? next.toLocaleString() : '—');
+  const fill = safeEl('xpFill');
+  if (fill) fill.style.width = pct + '%';
+
+  // Update VIP door level display
+  setEl('vipReqLevel', 'Lv.' + lvl);
+}
+
+function showLevelUp(newLevel) {
+  // Show shop badge on first unlock
+  if (newLevel >= 2) { const b=safeEl('shopNotifBadge'); if(b)b.style.display=''; }
+  const title = XP_TITLES[Math.min(Math.floor((newLevel - 1) / 3), XP_TITLES.length - 1)];
+  const unlocks = getLevelUnlock(newLevel);
+  const toast = safeEl('levelupToast');
+  const ltLvl = safeEl('ltLevel');
+  const ltUnlock = safeEl('ltUnlocked');
+  if (!toast) return;
+  if (ltLvl) ltLvl.textContent = newLevel;
+  if (ltUnlock) ltUnlock.textContent = unlocks || ('Welcome, ' + title + '!');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3200);
+}
+
+function getLevelUnlock(lvl) {
+  const unlocks = {
+    2: '🛒 Shop unlocked!',
+    3: '⚡ +2 max cheat energy',
+    5: '🤖 Slot Bot available',
+    7: '🎰 Coin Bot available',
+    8: '⚡ Cheat Recharge perk unlocked',
+    10: '🃏 Dice Bot available + new cosmetics',
+    12: '⚡ +2 max cheat energy again',
+    15: '🚀 Crash Bot available',
+    20: '👑 VIP password hint: think GOLD',
+    25: '👑 Full VIP access unlocked (password: JACKPOT)',
+    50: '🏆 You ARE The House.'
+  };
+  return unlocks[lvl] || null;
+}
+
+// ===== SHOP SYSTEM =====
+const BOT_DEFS = [
+  { id:'slotbot',  name:'Slot Bot',   icon:'🎰', desc:'Auto-plays slots in the background.', baseRate:3,  upgRate:9,  baseCost:5000,  upgCost:15000,  reqLevel:5 },
+  { id:'coinbot',  name:'Coin Bot',   icon:'🪙', desc:'Flips coins for passive income.',     baseRate:2,  upgRate:5,  baseCost:4000,  upgCost:10000,  reqLevel:7 },
+  { id:'dicebot',  name:'Dice Bot',   icon:'🎲', desc:'Rolls dice nonstop.',                 baseRate:4,  upgRate:11, baseCost:7000,  upgCost:20000,  reqLevel:10 },
+  { id:'crashbot', name:'Crash Bot',  icon:'🚀', desc:'Watches crash games for you.',        baseRate:8,  upgRate:22, baseCost:15000, upgCost:40000,  reqLevel:15 },
+];
+
+const PERK_DEFS = [
+  { id:'maxenergy2', name:'Energy Boost I',   icon:'⚡', desc:'Permanently adds +2 to max cheat energy.',    cost:10000, reqLevel:3, effect:() => { MAX_CHEAT_CAP += 2; updateCheatMeter(); } },
+  { id:'maxenergy4', name:'Energy Boost II',  icon:'⚡', desc:'Another +2 to max cheat energy.',             cost:25000, reqLevel:12, effect:() => { MAX_CHEAT_CAP += 2; updateCheatMeter(); } },
+  { id:'recharge',   name:'Cheat Recharge',   icon:'🔋', desc:'Doubles cheat energy gained from wins.',      cost:8000,  reqLevel:8,  effect:() => { perkRechargeDouble = true; } },
+  { id:'odds',       name:'Lucky Charm',      icon:'🍀', desc:'Slightly better win rates on all games.',     cost:20000, reqLevel:10, effect:() => { perkBetterOdds = true; } },
+  { id:'bigwin',     name:'High Roller Edge', icon:'💰', desc:'+10% payout on wins over 5× your bet.',       cost:30000, reqLevel:15, effect:() => { perkHighRollerBonus = true; } },
+];
+
+const COSMETIC_DEFS = [
+  { id:'default',   name:'Default',     price:0,     preview:'#0f1923/#1a2c38/#00e701', owned:true },
+  { id:'neon',      name:'Neon Nights', price:5000,  preview:'#0d0d1a/#1a1a2e/#ff00ff' },
+  { id:'gold',      name:'Gold Rush',   price:8000,  preview:'#1a1200/#2d2200/#f5a623' },
+  { id:'crimson',   name:'Crimson',     price:6000,  preview:'#1a0505/#2d1010/#e74c3c' },
+  { id:'cyber',     name:'Cyberpunk',   price:10000, preview:'#050510/#0f0f20/#00ffcc' },
+];
+
+const THEMES = {
+  default:  { bg:'#0f1923', sidebar:'#1a2c38', panel:'#213743', panel2:'#2d4a5a', border:'#2f4553', teal:'#00e701', 'teal-dim':'#00b300' },
+  neon:     { bg:'#0d0d1a', sidebar:'#1a1a2e', panel:'#16213e', panel2:'#1e2a4a', border:'#2d3561', teal:'#ff00ff', 'teal-dim':'#cc00cc' },
+  gold:     { bg:'#1a1200', sidebar:'#2d2200', panel:'#3d3000', panel2:'#4d3c00', border:'#6b5200', teal:'#f5a623', 'teal-dim':'#c4841c' },
+  crimson:  { bg:'#1a0505', sidebar:'#2d1010', panel:'#3d1515', panel2:'#4d1a1a', border:'#6b2525', teal:'#e74c3c', 'teal-dim':'#c0392b' },
+  cyber:    { bg:'#050510', sidebar:'#0f0f20', panel:'#141430', panel2:'#1a1a40', border:'#252550', teal:'#00ffcc', 'teal-dim':'#00ccaa' },
+};
+
+let shopState = {
+  bots: {},       // id -> { level: 1|2 }
+  perks: {},      // id -> true
+  cosmetic: 'default',
+};
+let MAX_CHEAT_CAP = 10;
+let perkRechargeDouble = false;
+let perkBetterOdds = false;
+let perkHighRollerBonus = false;
+let botIntervals = {};
+
+function openShop() {
+  const shopEl = safeEl('shopOverlay');
+  if (shopEl) shopEl.classList.add('open');
+  safeEl('shopNotifBadge') && (safeEl('shopNotifBadge').style.display = 'none');
+  renderShop();
+}
+function closeShop() { const shopEl = safeEl('shopOverlay'); if (shopEl) shopEl.classList.remove('open'); }
+
+function switchShopTab(tab) {
+  document.querySelectorAll('.shop-tab').forEach((t,i) => {
+    const tabs = ['bots','perks','cosmetics'];
+    t.classList.toggle('active', tabs[i] === tab);
+  });
+  document.querySelectorAll('.shop-section').forEach(s => s.classList.remove('active'));
+  const sec = safeEl('shopTab-' + tab);
+  if (sec) sec.classList.add('active');
+}
+
+function renderShop() {
+  renderBotShop();
+  renderPerkShop();
+  renderCosmeticShop();
+  renderActiveBots();
+}
+
+function renderBotShop() {
+  const grid = safeEl('botShopGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  BOT_DEFS.forEach(bot => {
+    const owned = shopState.bots[bot.id];
+    const upgraded = owned && owned.level === 2;
+    const canAfford = !owned ? balance >= bot.baseCost : !upgraded && balance >= bot.upgCost;
+    const locked = playerLevel < bot.reqLevel;
+
+    const card = document.createElement('div');
+    card.className = 'shop-card' + (owned ? ' owned' : '');
+    card.innerHTML = `
+      <div class="sc-icon">${bot.icon}</div>
+      <div class="sc-name">${bot.name}</div>
+      <div class="sc-desc">${bot.desc}<br><span style="color:var(--teal)">+$${owned && upgraded ? bot.upgRate : bot.baseRate}/sec</span></div>
+      <div class="sc-price">${locked ? '🔒 Req Lv.'+bot.reqLevel : !owned ? '$'+bot.baseCost.toLocaleString() : upgraded ? '✓ MAX' : 'Upgrade: $'+bot.upgCost.toLocaleString()}</div>
+      <button class="sc-btn ${(owned && upgraded) ? 'owned-btn' : ''}"
+        ${(!canAfford || locked || (owned && upgraded)) ? 'disabled' : ''}
+        onclick="buyBot('${bot.id}')">
+        ${locked ? 'Locked' : !owned ? 'Buy' : upgraded ? 'Max Level' : 'Upgrade'}
+      </button>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function renderPerkShop() {
+  const grid = safeEl('perkShopGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  PERK_DEFS.forEach(perk => {
+    const owned = shopState.perks[perk.id];
+    const canAfford = balance >= perk.cost;
+    const locked = playerLevel < perk.reqLevel;
+
+    const card = document.createElement('div');
+    card.className = 'shop-card' + (owned ? ' owned' : '');
+    card.innerHTML = `
+      <div class="sc-icon">${perk.icon}</div>
+      <div class="sc-name">${perk.name}</div>
+      <div class="sc-desc">${perk.desc}</div>
+      <div class="sc-price">${locked ? '🔒 Req Lv.'+perk.reqLevel : owned ? '✓ Active' : '$'+perk.cost.toLocaleString()}</div>
+      <button class="sc-btn ${owned ? 'owned-btn' : ''}"
+        ${(owned || !canAfford || locked) ? 'disabled' : ''}
+        onclick="buyPerk('${perk.id}')">
+        ${locked ? 'Locked' : owned ? 'Owned' : 'Buy'}
+      </button>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function renderCosmeticShop() {
+  const grid = safeEl('cosmeticShopGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  COSMETIC_DEFS.forEach(cos => {
+    const [bg, sb, ac] = cos.preview.split('/');
+    const owned = cos.owned || shopState.cosmetic === cos.id || cos.price === 0;
+    const isActive = shopState.cosmetic === cos.id;
+    const canAfford = balance >= cos.price;
+
+    const card = document.createElement('div');
+    card.className = 'shop-card' + (isActive ? ' owned' : '');
+    card.innerHTML = `
+      <div class="theme-preview" style="background:linear-gradient(135deg,${bg},${sb});border:1px solid ${ac};"></div>
+      <div class="sc-name">${cos.name}</div>
+      <div class="sc-price">${cos.price === 0 ? 'Free' : '$'+cos.price.toLocaleString()}</div>
+      <button class="sc-btn ${isActive ? 'owned-btn' : ''}"
+        ${(!canAfford && !owned && cos.price > 0) ? 'disabled' : ''}
+        onclick="buyCosmetic('${cos.id}', ${cos.price})">
+        ${isActive ? '✓ Active' : owned || cos.price === 0 ? 'Apply' : 'Buy & Apply'}
+      </button>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function renderActiveBots() {
+  const list = safeEl('activeBotsList');
+  if (!list) return;
+  const activeIds = Object.keys(shopState.bots);
+  if (activeIds.length === 0) {
+    list.innerHTML = '<div style="font-size:11px;color:var(--text-mute);">No bots yet. Buy one above!</div>';
+    return;
+  }
+  list.innerHTML = '';
+  activeIds.forEach(id => {
+    const def = BOT_DEFS.find(b => b.id === id);
+    if (!def) return;
+    const lvl = shopState.bots[id].level;
+    const rate = lvl === 2 ? def.upgRate : def.baseRate;
+    const panel = document.createElement('div');
+    panel.className = 'bot-panel';
+    panel.innerHTML = `
+      <div class="bot-avatar">${def.icon}</div>
+      <div class="bot-info">
+        <div class="bot-name">${def.name} ${lvl===2?'<span style="color:var(--gold);font-size:9px;">MK2</span>':''}</div>
+        <div class="bot-rate">+$${rate}/sec</div>
+        <div class="bot-status">Running…</div>
+      </div>
+      <button class="bot-upgrade-btn" onclick="buyBot('${id}')" ${lvl===2?'disabled':''}>
+        ${lvl===2?'MAX':'Upgrade'}
+      </button>
+    `;
+    list.appendChild(panel);
+  });
+}
+
+function buyBot(id) {
+  const def = BOT_DEFS.find(b => b.id === id);
+  if (!def) return;
+  const owned = shopState.bots[id];
+  if (owned && owned.level === 2) return;
+
+  const cost = !owned ? def.baseCost : def.upgCost;
+  if (balance < cost) { alert('Not enough funds!'); return; }
+
+  updateBalance(-cost);
+  gainXP(cost / 100);
+
+  if (!owned) {
+    shopState.bots[id] = { level: 1 };
+    startBot(id);
+  } else {
+    shopState.bots[id].level = 2;
+    // restart bot at higher rate
+    if (botIntervals[id]) clearInterval(botIntervals[id]);
+    startBot(id);
+  }
+  renderShop();
+}
+
+function startBot(id) {
+  const def = BOT_DEFS.find(b => b.id === id);
+  if (!def) return;
+  if (botIntervals[id]) clearInterval(botIntervals[id]);
+
+  botIntervals[id] = setInterval(() => {
+    if (!shopState.bots[id]) return;
+    const lvl = shopState.bots[id].level;
+    const rate = lvl === 2 ? def.upgRate : def.baseRate;
+    const earned = rate + Math.floor(Math.random() * Math.floor(rate * 0.5));
+    updateBalance(earned);
+    gainXP(2);
+    showBotIncome(def.icon, earned);
+  }, 4000 + Math.floor(Math.random() * 2000));
+}
+
+function showBotIncome(icon, amount) {
+  const popup = document.createElement('div');
+  popup.className = 'bot-income-popup';
+  popup.textContent = icon + ' +$' + amount;
+  popup.style.left = (220 + Math.random() * 200) + 'px';
+  popup.style.top  = (window.innerHeight - 120 - Math.random() * 60) + 'px';
+  document.body.appendChild(popup);
+  setTimeout(() => popup.remove(), 1400);
+}
+
+function buyPerk(id) {
+  const def = PERK_DEFS.find(p => p.id === id);
+  if (!def || shopState.perks[id]) return;
+  if (balance < def.cost) { alert('Not enough funds!'); return; }
+  updateBalance(-def.cost);
+  gainXP(def.cost / 80);
+  shopState.perks[id] = true;
+  def.effect();
+  renderShop();
+}
+
+function buyCosmetic(id, price) {
+  if (price > 0 && shopState.cosmetic !== id) {
+    // check if already bought (track purchased)
+    if (!shopState.purchasedCosmetics) shopState.purchasedCosmetics = { default:true };
+    if (!shopState.purchasedCosmetics[id]) {
+      if (balance < price) { alert('Not enough funds!'); return; }
+      updateBalance(-price);
+      gainXP(price / 60);
+      shopState.purchasedCosmetics[id] = true;
+    }
+  }
+  shopState.cosmetic = id;
+  applyTheme(id);
+  renderShop();
+}
+
+function applyTheme(id) {
+  const theme = THEMES[id] || THEMES.default;
+  const root = document.documentElement;
+  Object.entries(theme).forEach(([k, v]) => {
+    root.style.setProperty('--' + k, v);
+  });
+}
+
+// ===== VIP CASINO =====
+const VIP_PASSWORD = 'JACKPOT';
+const VIP_MIN_BALANCE = 100000;
+
+let vipRouletteCheatType = null;
+let vipBjState = { deck:[], player:[], dealer:[], active:false, bet:0, peeked:false, bustDealer:false };
+let vipCrashState = 'idle';
+let vipCrashCheatMin = 0;
+let vipCrashBetAmt = 0;
+let vipCrashMultiplier = 1.0;
+let vipCrashTarget = 0;
+let vipCrashAnimFrame = null;
+let vipCrashStartTime = 0;
+let vipBetPickedNum = null;
+let vipBetPickedType = null;
+
+function tryEnterVip() {
+  const pw = (safeEl('vipPassword') || {value:''}).value.trim().toUpperCase();
+  const msg = safeEl('vipDoorMsg');
+
+  if (balance < VIP_MIN_BALANCE) {
+    if (msg) { msg.textContent = `⛔ Insufficient funds. You need $${VIP_MIN_BALANCE.toLocaleString()}.`; msg.className = 'msg-box lose'; }
+    return;
+  }
+  if (pw !== VIP_PASSWORD) {
+    if (msg) { msg.textContent = '🔒 Wrong password. Ask around…'; msg.className = 'msg-box lose'; }
+    return;
+  }
+
+  // Enter!
+  const overlay = safeEl('vipOverlay');
+  if (overlay) overlay.classList.add('open');
+  updateVipBalance();
+  vipBuildBetGrid();
+  drawVipCrashCanvas(0, false);
+}
+
+function closeVip() {
+  const overlay = safeEl('vipOverlay');
+  if (overlay) overlay.classList.remove('open');
+  if (vipCrashAnimFrame) cancelAnimationFrame(vipCrashAnimFrame);
+}
+
+function updateVipBalance() {
+  const el = safeEl('vipBalance');
+  if (el) el.textContent = balance.toLocaleString();
+  const reqEl = safeEl('vipReqBalance');
+  if (reqEl) reqEl.textContent = '$' + balance.toLocaleString();
+}
+
+// --- VIP Roulette ---
+const VIP_ROULETTE_NUMS = Array.from({length:37},(_,i)=>i);
+const VIP_RED = [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36];
+
+function vipBuildBetGrid() {
+  const grid = safeEl('vipBetGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  // Outside bets
+  const outside = [
+    {label:'Red', type:'red'},{label:'Black', type:'black'},
+    {label:'Odd', type:'odd'},{label:'Even', type:'even'},
+    {label:'1-18', type:'low'},{label:'19-36', type:'high'},
+  ];
+  outside.forEach(b => {
+    const btn = document.createElement('button');
+    btn.className = 'bet-grid-btn';
+    btn.textContent = b.label;
+    if (b.type==='red') btn.style.color='#ff6b6b';
+    btn.onclick = () => { vipBetPickedNum=null; vipBetPickedType=b.type; grid.querySelectorAll('.bet-grid-btn').forEach(x=>x.classList.remove('sel')); btn.classList.add('sel'); };
+    grid.appendChild(btn);
+  });
+}
+
+function vipSpinRoulette() {
+  const bet = parseInt((safeEl('vipRouletteBet')||{value:5000}).value)||5000;
+  if (bet > balance) { setMsg('vipRouletteMsg','Not enough funds!','lose'); return; }
+  if (!vipBetPickedNum && !vipBetPickedType) { setMsg('vipRouletteMsg','Pick a bet first!','lose'); return; }
+
+  updateBalance(-bet);
+  updateVipBalance();
+
+  let result;
+  if (vipRouletteCheatType === 'pick' && vipBetPickedNum !== null) {
+    result = vipBetPickedNum;
+  } else if (vipRouletteCheatType === 'red') {
+    result = VIP_RED[Math.floor(Math.random() * VIP_RED.length)];
+  } else if (vipRouletteCheatType === 'black') {
+    const blacks = VIP_ROULETTE_NUMS.filter(n => n>0 && !VIP_RED.includes(n));
+    result = blacks[Math.floor(Math.random() * blacks.length)];
+  } else {
+    // Biased 55%
+    const t = vipBetPickedType;
+    if (Math.random() < 0.55) {
+      if (t==='red') result = VIP_RED[Math.floor(Math.random()*VIP_RED.length)];
+      else if (t==='black') { const bl=VIP_ROULETTE_NUMS.filter(n=>n>0&&!VIP_RED.includes(n)); result=bl[Math.floor(Math.random()*bl.length)]; }
+      else if (t==='odd') { const od=VIP_ROULETTE_NUMS.filter(n=>n%2!==0&&n>0); result=od[Math.floor(Math.random()*od.length)]; }
+      else if (t==='even') { const ev=VIP_ROULETTE_NUMS.filter(n=>n%2===0&&n>0); result=ev[Math.floor(Math.random()*ev.length)]; }
+      else if (t==='low') { result=1+Math.floor(Math.random()*18); }
+      else if (t==='high') { result=19+Math.floor(Math.random()*18); }
+      else result=Math.floor(Math.random()*37);
+    } else {
+      result=Math.floor(Math.random()*37);
+    }
+  }
+  vipRouletteCheatType = null;
+
+  const isRed = VIP_RED.includes(result);
+  const icon = result===0?'🟢':isRed?'🔴':'⚫';
+  safeEl('vipRouletteWheel') && (safeEl('vipRouletteWheel').textContent = icon + ' ' + result);
+
+  // Payout
+  let win = 0;
+  const t = vipBetPickedType;
+  if (t==='red' && isRed) win=bet*2;
+  else if (t==='black' && result>0&&!isRed) win=bet*2;
+  else if (t==='odd' && result%2!==0&&result>0) win=bet*2;
+  else if (t==='even' && result%2===0&&result>0) win=bet*2;
+  else if (t==='low' && result>=1&&result<=18) win=bet*2;
+  else if (t==='high' && result>=19&&result<=36) win=bet*2;
+
+  if (win > 0) {
+    updateBalance(win);
+    updateVipBalance();
+    recordWin(win);
+    gainXP(Math.floor(bet / 200));
+    if (perkHighRollerBonus && win >= bet*5) updateBalance(Math.floor(win * 0.1));
+    setMsg('vipRouletteMsg', `${icon} ${result} — WIN! +$${win-bet}`, 'win');
+    if (win >= bet*3) showConfetti();
+  } else {
+    recordLoss(bet);
+    gainXP(Math.floor(bet / 500));
+    setMsg('vipRouletteMsg', `${icon} ${result} — Lost $${bet}`, 'lose');
+  }
+}
+
+function vipRouletteCheat(type) {
+  const costs = {pick:3,red:2,black:2};
+  if (!useCheat(costs[type]||2)) return;
+  vipRouletteCheatType = type;
+  setMsg('vipRouletteMsg', '⚡ Cheat active — spin now!', 'cheat-msg');
+}
+
+// --- VIP Blackjack ---
+function vipBjMakeDeck() {
+  const suits=['♠','♥','♦','♣'], ranks=['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+  const d=[];
+  suits.forEach(s=>ranks.forEach(r=>d.push({r,s,v:r==='A'?11:isNaN(r)?10:+r})));
+  return d.sort(()=>Math.random()-0.5);
+}
+function vipBjValue(hand) {
+  let v=hand.reduce((a,c)=>a+c.v,0), aces=hand.filter(c=>c.r==='A').length;
+  while(v>21&&aces-->0) v-=10;
+  return v;
+}
+function vipBjCardStr(c, hide=false) {
+  return hide ? '<span style="background:#2d4a5a;border:1px solid #3a5a6a;padding:4px 8px;border-radius:4px;margin:2px;">🂠</span>'
+              : `<span style="background:#213743;border:1px solid #2f4553;padding:4px 8px;border-radius:4px;margin:2px;color:${c.s==='♥'||c.s==='♦'?'#ff6b6b':'#fff'}">${c.r}${c.s}</span>`;
+}
+function vipBjRender(showDealer=false) {
+  const area = safeEl('vipBjArea');
+  if (!area) return;
+  const s = vipBjState;
+  const peek = s.peeked;
+  area.innerHTML = `
+    <div style="margin-bottom:8px;">
+      <div style="font-size:10px;color:var(--text-mute);margin-bottom:4px;">DEALER ${showDealer?'('+vipBjValue(s.dealer)+')':peek?'[peeked]':''}</div>
+      <div>${s.dealer.map((c,i)=>vipBjCardStr(c, i>0&&!showDealer&&!peek||(i>0&&peek)?(i>0&&!showDealer):false)).join('')}</div>
+    </div>
+    <div>
+      <div style="font-size:10px;color:var(--text-mute);margin-bottom:4px;">YOU (${vipBjValue(s.player)})</div>
+      <div>${s.player.map(c=>vipBjCardStr(c)).join('')}</div>
+    </div>
+  `;
+}
+function vipBjDeal() {
+  const bet = parseInt((safeEl('vipBjBet')||{value:5000}).value)||5000;
+  if (bet > balance) { setMsg('vipBjMsg','Not enough funds!','lose'); return; }
+  const s = vipBjState;
+  s.deck = vipBjMakeDeck(); s.player=[]; s.dealer=[]; s.active=true; s.bet=bet; s.peeked=false; s.bustDealer=false;
+  updateBalance(-bet);
+  updateVipBalance();
+  s.player.push(s.deck.pop(), s.deck.pop());
+  s.dealer.push(s.deck.pop(), s.deck.pop());
+  vipBjRender();
+  safeEl('vipBjDealBtn') && (safeEl('vipBjDealBtn').disabled=true);
+  safeEl('vipBjHitBtn') && (safeEl('vipBjHitBtn').disabled=false);
+  safeEl('vipBjStandBtn') && (safeEl('vipBjStandBtn').disabled=false);
+  setMsg('vipBjMsg','');
+  if (vipBjValue(s.player)===21) { setTimeout(vipBjStand,400); }
+}
+function vipBjHit() {
+  const s=vipBjState;
+  if (!s.active) return;
+  s.player.push(s.deck.pop());
+  vipBjRender();
+  if (vipBjValue(s.player)>21) { setMsg('vipBjMsg','Bust! -$'+s.bet,'lose'); recordLoss(s.bet); updateVipBalance(); vipBjResetUI(); }
+}
+function vipBjStand() {
+  const s=vipBjState;
+  if (!s.active) return;
+  if (s.bustDealer) {
+    s.dealer.push({r:'K',s:'♠',v:10},{r:'K',s:'♣',v:10});
+    while(vipBjValue(s.dealer)<=21) s.dealer.push(s.deck.pop());
+  } else {
+    while(vipBjValue(s.dealer)<17) s.dealer.push(s.deck.pop());
+  }
+  s.active=false;
+  vipBjRender(true);
+  const pv=vipBjValue(s.player), dv=vipBjValue(s.dealer);
+  if (pv>21) { setMsg('vipBjMsg','Bust! -$'+s.bet,'lose'); recordLoss(s.bet); }
+  else if (dv>21||pv>dv) {
+    const mult = pv===21&&s.player.length===2 ? 2.5 : 2;
+    const win=Math.floor(s.bet*mult);
+    updateBalance(win); updateVipBalance(); recordWin(win);
+    gainXP(Math.floor(s.bet/150));
+    if (perkHighRollerBonus && win >= s.bet*5) updateBalance(Math.floor(win*0.1));
+    setMsg('vipBjMsg', (pv===21&&s.player.length===2?'💎 Blackjack! ':'WIN! ')+'+$'+(win-s.bet), 'win');
+    if (win>=s.bet*2) showConfetti();
+  } else if (pv===dv) { updateBalance(s.bet); updateVipBalance(); setMsg('vipBjMsg','Push.','push'); }
+  else { recordLoss(s.bet); gainXP(Math.floor(s.bet/500)); setMsg('vipBjMsg','Dealer wins. -$'+s.bet,'lose'); }
+  vipBjResetUI();
+}
+function vipBjResetUI() {
+  safeEl('vipBjDealBtn') && (safeEl('vipBjDealBtn').disabled=false);
+  safeEl('vipBjHitBtn') && (safeEl('vipBjHitBtn').disabled=true);
+  safeEl('vipBjStandBtn') && (safeEl('vipBjStandBtn').disabled=true);
+}
+function vipBjCheat(type) {
+  const costs={peek:2,bj:3,bust:3};
+  if (!useCheat(costs[type]||2)) return;
+  const s=vipBjState;
+  if (type==='peek') { s.peeked=true; vipBjRender(); setMsg('vipBjMsg','⚡ Peeked at dealer hand!','cheat-msg'); }
+  else if (type==='bj') {
+    const val = vipBjValue(s.player);
+    if (val < 21) {
+      // Replace hand with blackjack
+      s.player = [{r:'A',s:'♠',v:11},{r:'K',s:'♥',v:10}];
+      vipBjRender();
+      setMsg('vipBjMsg','⚡ Blackjack forced!','cheat-msg');
+    }
+  }
+  else if (type==='bust') { s.bustDealer=true; setMsg('vipBjMsg','⚡ Dealer will bust!','cheat-msg'); }
+}
+
+// --- VIP Crash ---
+function drawVipCrashCanvas(mult, crashed) {
+  const cvs = safeEl('vipCrashCanvas');
+  if (!cvs) return;
+  const ctx = cvs.getContext('2d');
+  const W=cvs.width, H=cvs.height;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle = '#0f1411';
+  ctx.fillRect(0,0,W,H);
+  if (mult <= 1) return;
+  const pts = Math.min(Math.floor((mult-1)*30), W-40);
+  ctx.beginPath();
+  ctx.moveTo(20, H-20);
+  for (let i=0; i<=pts; i++) {
+    const x = 20 + (i/(W-40))*(W-40);
+    const y = (H-20) - Math.pow(i/pts, 1.3) * (H-40);
+    if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.strokeStyle = crashed ? '#e74c3c' : '#f5a623';
+  ctx.lineWidth = 3;
+  ctx.shadowColor = crashed ? '#e74c3c' : '#f5a623';
+  ctx.shadowBlur = 8;
+  ctx.stroke();
+}
+
+function vipCrashBet() {
+  const bet = parseInt((safeEl('vipCrashBet')||{value:10000}).value)||10000;
+  if (bet > balance) { setMsg('vipCrashMsg','Not enough funds!','lose'); return; }
+  const autoVal = parseFloat((safeEl('vipCrashAuto')||{value:3}).value)||0;
+
+  updateBalance(-bet);
+  updateVipBalance();
+  vipCrashBetAmt = bet;
+  vipCrashState = 'running';
+  vipCrashMultiplier = 1.0;
+  vipCrashStartTime = performance.now();
+  safeEl('vipCrashBetBtn') && (safeEl('vipCrashBetBtn').disabled=true);
+  safeEl('vipCrashCOBtn') && (safeEl('vipCrashCOBtn').disabled=false);
+
+  // Crash point
+  let crashAt;
+  if (vipCrashCheatMin > 0) {
+    crashAt = vipCrashCheatMin + Math.random() * vipCrashCheatMin * 2;
+    vipCrashCheatMin = 0;
+  } else {
+    const r = Math.random();
+    crashAt = r < 0.4 ? 1 + r * 2 : r < 0.7 ? 2 + r * 4 : r < 0.9 ? 4 + r * 8 : 10 + r * 40;
+  }
+  vipCrashTarget = crashAt;
+  vipCrashAutoTarget = autoVal > 1 ? autoVal : 0;
+
+  function tick(ts) {
+    if (vipCrashState !== 'running') return;
+    const elapsed = (ts - vipCrashStartTime) / 1000;
+    vipCrashMultiplier = 1 + elapsed * 0.6 + elapsed * elapsed * 0.15;
+    const multEl = safeEl('vipCrashMult');
+    if (multEl) multEl.textContent = vipCrashMultiplier.toFixed(2) + '×';
+    drawVipCrashCanvas(vipCrashMultiplier, false);
+    // Auto cashout
+    if (vipCrashAutoTarget > 0 && vipCrashMultiplier >= vipCrashAutoTarget) {
+      vipCrashCashout(); return;
+    }
+    if (vipCrashMultiplier >= vipCrashTarget) {
+      // Crashed
+      vipCrashState = 'crashed';
+      drawVipCrashCanvas(vipCrashMultiplier, true);
+      const multEl2 = safeEl('vipCrashMult');
+      if (multEl2) { multEl2.textContent = '💥 ' + vipCrashMultiplier.toFixed(2) + '×'; multEl2.style.color='#e74c3c'; }
+      recordLoss(vipCrashBetAmt);
+      gainXP(Math.floor(vipCrashBetAmt/500));
+      setMsg('vipCrashMsg', `💥 Crashed at ${vipCrashMultiplier.toFixed(2)}× — Lost $${vipCrashBetAmt}`, 'lose');
+      updateVipBalance();
+      safeEl('vipCrashBetBtn') && (safeEl('vipCrashBetBtn').disabled=false);
+      safeEl('vipCrashCOBtn') && (safeEl('vipCrashCOBtn').disabled=true);
+      setTimeout(()=>{ const m=safeEl('vipCrashMult'); if(m)m.style.color=''; },2000);
+      return;
+    }
+    vipCrashAnimFrame = requestAnimationFrame(tick);
+  }
+  vipCrashAnimFrame = requestAnimationFrame(tick);
+}
+let vipCrashAutoTarget = 0;
+
+function vipCrashCashout() {
+  if (vipCrashState !== 'running') return;
+  cancelAnimationFrame(vipCrashAnimFrame);
+  vipCrashState = 'idle';
+  const win = Math.floor(vipCrashBetAmt * vipCrashMultiplier);
+  updateBalance(win);
+  updateVipBalance();
+  recordWin(win);
+  gainXP(Math.floor(vipCrashBetAmt / 100));
+  if (perkHighRollerBonus && vipCrashMultiplier >= 5) updateBalance(Math.floor(win * 0.1));
+  setMsg('vipCrashMsg', `💸 Cashed out at ${vipCrashMultiplier.toFixed(2)}× — +$${win - vipCrashBetAmt}`, 'win');
+  if (vipCrashMultiplier >= 3) showConfetti();
+  safeEl('vipCrashBetBtn') && (safeEl('vipCrashBetBtn').disabled=false);
+  safeEl('vipCrashCOBtn') && (safeEl('vipCrashCOBtn').disabled=true);
+}
+
+function vipCrashCheat(type) {
+  const costs = {'5x':3, '10x':5, peek:2};
+  if (!useCheat(costs[type]||2)) return;
+  if (type==='5x') { vipCrashCheatMin=5; setMsg('vipCrashMsg','⚡ Will go at least 5×','cheat-msg'); }
+  else if (type==='10x') { vipCrashCheatMin=10; setMsg('vipCrashMsg','⚡ Will go at least 10×','cheat-msg'); }
+  else if (type==='peek') {
+    const peek = vipCrashTarget > 1 ? vipCrashTarget.toFixed(2) : '?';
+    setMsg('vipCrashMsg', `👁 Crash point approx: ${peek}×`, 'cheat-msg');
+  }
+}
+
 // ===== INIT =====
 setDie('die1', 6); setDie('die2', 1);
 setDie('crDie1', 4); setDie('crDie2', 3);
 buildBetGrid();
 drawWheel(0);
 updateStatsHud();
+updateXPBar();
 // New games init
 renderMinesGrid();
 renderPlinkoMultipliers();
 drawPlinkoBoard();
 chickenRenderRoad();
+// Show shop badge notification after a delay so player knows it exists
+setTimeout(() => { const b=safeEl('shopNotifBadge'); if(b&&playerLevel>=2)b.style.display=''; }, 500);
 
 </script>
 </body>
