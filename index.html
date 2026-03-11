@@ -2338,6 +2338,7 @@ function updateBalance(delta) {
   const sb = document.getElementById('sidebarBalance');
   if (sb) sb.textContent = balance.toLocaleString();
   updateStatsHud();
+  saveProgress();
   if (balance === 0) {
     setTimeout(() => { if (confirm('Broke! Reset to $1,000?')) resetGame(); }, 300);
   }
@@ -2406,6 +2407,7 @@ function showConfetti() {
 
 function safeEl(id) { return document.getElementById(id); }
 function resetGame() {
+  try { localStorage.removeItem(SAVE_KEY); } catch(e) {}
   balance = 1000;
   cheatEnergy = 10;
   stats = { wins: 0, losses: 0, cheats: 0, moneyWon: 0, moneyLost: 0 };
@@ -4258,7 +4260,7 @@ function crashPlaceBet() {
   function animate(ts) {
     if (!start) start = ts;
     const elapsed = (ts - start) / 1000;
-    crashMultiplier = parseFloat((1 + elapsed * elapsed * 0.25 + elapsed * 0.3).toFixed(2));
+    crashMultiplier = parseFloat((1 + elapsed * elapsed * 0.06 + elapsed * 0.12).toFixed(2));
     document.getElementById('crashMultiplier').textContent = crashMultiplier.toFixed(2) + '×';
     crashPoints.push(crashMultiplier);
     drawCrashCanvas();
@@ -5053,6 +5055,7 @@ function gainXP(amount) {
     showLevelUp(playerLevel);
   }
   updateXPBar();
+  saveProgress();
 }
 
 function updateXPBar() {
@@ -5669,7 +5672,7 @@ function vipCrashBet() {
   function tick(ts) {
     if (vipCrashState !== 'running') return;
     const elapsed = (ts - vipCrashStartTime) / 1000;
-    vipCrashMultiplier = 1 + elapsed * 0.6 + elapsed * elapsed * 0.15;
+    vipCrashMultiplier = 1 + elapsed * 0.15 + elapsed * elapsed * 0.04;
     const multEl = safeEl('vipCrashMult');
     if (multEl) multEl.textContent = vipCrashMultiplier.toFixed(2) + '×';
     drawVipCrashCanvas(vipCrashMultiplier, false);
@@ -5725,7 +5728,44 @@ function vipCrashCheat(type) {
   }
 }
 
+// ===== SAVE / LOAD PROGRESS =====
+const SAVE_KEY = 'crook_casino_save';
+
+function saveProgress() {
+  const data = {
+    balance, cheatEnergy, playerXP, playerLevel,
+    stats, shopState, MAX_CHEAT_CAP,
+    perkRechargeDouble, perkBetterOdds, perkHighRollerBonus,
+  };
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify(data)); } catch(e) {}
+}
+
+function loadProgress() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return;
+    const d = JSON.parse(raw);
+    if (d.balance       !== undefined) balance            = d.balance;
+    if (d.cheatEnergy   !== undefined) cheatEnergy        = d.cheatEnergy;
+    if (d.playerXP      !== undefined) playerXP           = d.playerXP;
+    if (d.playerLevel   !== undefined) playerLevel        = d.playerLevel;
+    if (d.stats         !== undefined) stats              = d.stats;
+    if (d.shopState     !== undefined) shopState          = d.shopState;
+    if (d.MAX_CHEAT_CAP !== undefined) MAX_CHEAT_CAP      = d.MAX_CHEAT_CAP;
+    if (d.perkRechargeDouble !== undefined) perkRechargeDouble = d.perkRechargeDouble;
+    if (d.perkBetterOdds     !== undefined) perkBetterOdds     = d.perkBetterOdds;
+    if (d.perkHighRollerBonus!== undefined) perkHighRollerBonus= d.perkHighRollerBonus;
+
+    // Re-apply cosmetic theme
+    if (shopState.cosmetic) applyTheme(shopState.cosmetic);
+
+    // Restart any purchased bots
+    Object.keys(shopState.bots || {}).forEach(id => startBot(id));
+  } catch(e) {}
+}
+
 // ===== INIT =====
+loadProgress();
 setDie('die1', 6); setDie('die2', 1);
 setDie('crDie1', 4); setDie('crDie2', 3);
 buildBetGrid();
