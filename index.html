@@ -1522,7 +1522,7 @@ body {
             </div>
             <div class="casino-card-body" style="background:#1a0f0a;">
               <div class="casino-card-name" style="color:var(--gold);">The Inner Sanctum</div>
-              <div class="casino-card-sub" style="color:#8b6914;">High stakes tables behind a locked door. You'll need $100,000 in your account and the right password to get in. The games don't mess around.</div>
+              <div class="casino-card-sub" style="color:#8b6914;">High stakes tables behind a locked door. You'll need $100,000 in your account to get in. The games don't mess around.</div>
               <div class="casino-card-tags">
                 <span class="casino-card-tag" style="background:rgba(245,166,35,0.1);color:var(--gold);border:1px solid rgba(245,166,35,0.3);">👑 VIP ONLY</span>
                 <span class="casino-card-tag" style="background:rgba(245,166,35,0.08);color:#8b6914;border:1px solid rgba(139,105,20,0.3);">$100K MINIMUM</span>
@@ -1538,9 +1538,8 @@ body {
           <div style="font-size:11px;font-weight:700;color:var(--text-dim);margin-bottom:6px;">💡 How to unlock the VIP Room</div>
           <div style="font-size:11px;color:var(--text-mute);line-height:1.7;">
             1. Build your bankroll to <span style="color:var(--gold);">$100,000</span> playing on the main floor.<br>
-            2. Reach <span style="color:var(--gold);">Level 20</span> in the progression system — a hint drops in your level-up toast.<br>
-            3. The password is earned, not given. Keep playing.<br>
-            <span style="color:rgba(255,255,255,0.15);font-size:10px;user-select:none;">················· JACKPOT ·················</span>
+            2. Click <span style="color:var(--gold);">VIP Room</span> in the sidebar and hit Enter.<br>
+            3. That's it — money talks.
           </div>
         </div>
       </div>
@@ -2134,7 +2133,6 @@ body {
         </div>
       </div>
 
-    </div><!-- end games-grid -->
 
       <!-- ====== CHICKEN ====== -->
       <div class="game-panel full-width" id="game-chicken" style="margin-top:12px;">
@@ -2190,7 +2188,7 @@ body {
       </div>
 
       <!-- VIP DOOR -->
-      <div class="vip-door full-width" id="game-vip-door" style="margin-top:12px;">
+      <div class="vip-door game-panel full-width" id="game-vip-door" style="margin-top:12px;">
         <div class="game-header">
           <div class="game-name"><div class="game-icon">👑</div>The Inner Sanctum</div>
           <span class="vip-badge-vip">VIP ONLY</span>
@@ -2198,7 +2196,7 @@ body {
         <div class="vip-body">
           <div class="vip-door-icon">🚪</div>
           <div class="vip-door-title">High Roller Room</div>
-          <div class="vip-door-sub">Exclusive tables. Minimum $100,000 bankroll.<br>Invite only. You know the code.</div>
+          <div class="vip-door-sub">Exclusive tables. Minimum $100,000 bankroll.<br>Build your stack and the door opens.</div>
           <div class="vip-req">
             <div class="vip-req-item">
               <div class="vip-req-val" id="vipReqBalance">$0</div>
@@ -2214,7 +2212,6 @@ body {
             </div>
           </div>
           <div class="vip-pass-wrap">
-            <input class="vip-pass-input" type="password" id="vipPassword" placeholder="••••••••" maxlength="16" onkeydown="if(event.key==='Enter')tryEnterVip()">
             <button class="vip-enter-btn" onclick="tryEnterVip()">ENTER →</button>
           </div>
           <div class="msg-box" id="vipDoorMsg" style="max-width:300px;margin:10px auto 0;"></div>
@@ -2374,7 +2371,7 @@ function toggleCheat(id) {
 
 function getBet(inputId) {
   const val = parseInt(document.getElementById(inputId).value) || 25;
-  return Math.min(Math.max(val, 5), Math.min(500, balance));
+  return Math.min(Math.max(val, 5), balance);
 }
 
 function addLog(logId, msg, type = '') {
@@ -4260,7 +4257,7 @@ function crashPlaceBet() {
   function animate(ts) {
     if (!start) start = ts;
     const elapsed = (ts - start) / 1000;
-    crashMultiplier = parseFloat((1 + elapsed * elapsed * 0.06 + elapsed * 0.12).toFixed(2));
+    crashMultiplier = parseFloat((1 + elapsed * elapsed * 0.018 + elapsed * 0.07).toFixed(2));
     document.getElementById('crashMultiplier').textContent = crashMultiplier.toFixed(2) + '×';
     crashPoints.push(crashMultiplier);
     drawCrashCanvas();
@@ -5103,8 +5100,8 @@ function getLevelUnlock(lvl) {
     10: '🃏 Dice Bot available + new cosmetics',
     12: '⚡ +2 max cheat energy again',
     15: '🚀 Crash Bot available',
-    20: '👑 VIP password hint: think GOLD',
-    25: '👑 Full VIP access unlocked (password: JACKPOT)',
+    20: '👑 VIP Room unlocks at $100,000 — you\'re getting close',
+    25: '👑 You\'re in the big leagues now. The VIP Room awaits.',
     50: '🏆 You ARE The House.'
   };
   return unlocks[lvl] || null;
@@ -5390,15 +5387,10 @@ let vipBetPickedNum = null;
 let vipBetPickedType = null;
 
 function tryEnterVip() {
-  const pw = (safeEl('vipPassword') || {value:''}).value.trim().toUpperCase();
   const msg = safeEl('vipDoorMsg');
 
   if (balance < VIP_MIN_BALANCE) {
     if (msg) { msg.textContent = `⛔ Insufficient funds. You need $${VIP_MIN_BALANCE.toLocaleString()}.`; msg.className = 'msg-box lose'; }
-    return;
-  }
-  if (pw !== VIP_PASSWORD) {
-    if (msg) { msg.textContent = '🔒 Wrong password. Ask around…'; msg.className = 'msg-box lose'; }
     return;
   }
 
@@ -5736,6 +5728,7 @@ function saveProgress() {
     balance, cheatEnergy, playerXP, playerLevel,
     stats, shopState, MAX_CHEAT_CAP,
     perkRechargeDouble, perkBetterOdds, perkHighRollerBonus,
+    savedAt: Date.now(),
   };
   try { localStorage.setItem(SAVE_KEY, JSON.stringify(data)); } catch(e) {}
 }
@@ -5759,9 +5752,53 @@ function loadProgress() {
     // Re-apply cosmetic theme
     if (shopState.cosmetic) applyTheme(shopState.cosmetic);
 
+    // Offline earnings
+    if (d.savedAt && Object.keys(shopState.bots || {}).length > 0) {
+      const offlineSecs = Math.min((Date.now() - d.savedAt) / 1000, 28800); // cap at 8 hours
+      if (offlineSecs > 60) {
+        let offlineEarned = 0;
+        Object.entries(shopState.bots).forEach(([id, bot]) => {
+          const def = BOT_DEFS.find(b => b.id === id);
+          if (!def) return;
+          const rate = bot.level === 2 ? def.upgRate : def.baseRate;
+          offlineEarned += Math.floor(rate * offlineSecs);
+        });
+        if (offlineEarned > 0) {
+          balance += offlineEarned;
+          const mins = Math.floor(offlineSecs / 60);
+          const timeStr = mins >= 60 ? `${Math.floor(mins/60)}h ${mins%60}m` : `${mins}m`;
+          setTimeout(() => showOfflineModal(offlineEarned, timeStr), 800);
+        }
+      }
+    }
+
     // Restart any purchased bots
     Object.keys(shopState.bots || {}).forEach(id => startBot(id));
   } catch(e) {}
+}
+
+function showOfflineModal(earned, timeStr) {
+  let modal = document.getElementById('offlineModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'offlineModal';
+    modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;display:flex;align-items:center;justify-content:center;';
+    modal.innerHTML = `
+      <div style="background:var(--panel);border:1px solid var(--teal-border);border-radius:12px;padding:28px 32px;max-width:340px;text-align:center;">
+        <div style="font-size:36px;margin-bottom:10px;">🤖</div>
+        <div style="font-size:16px;font-weight:700;color:var(--teal);margin-bottom:6px;">Welcome back!</div>
+        <div style="font-size:12px;color:var(--text-mute);margin-bottom:16px;">Your bots kept working while you were away.</div>
+        <div style="font-size:11px;color:var(--text-dim);margin-bottom:4px;">Away for <span style="color:var(--text)">${timeStr}</span></div>
+        <div style="font-size:26px;font-weight:800;color:var(--teal);margin:10px 0;">+$${earned.toLocaleString()}</div>
+        <div style="font-size:10px;color:var(--text-mute);margin-bottom:18px;">Added to your bankroll</div>
+        <button onclick="document.getElementById('offlineModal').remove();saveProgress();updateStatsHud();"
+          style="background:var(--teal);color:#0f1923;border:none;border-radius:6px;padding:9px 24px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;font-size:13px;">
+          Collect →
+        </button>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
 }
 
 // ===== INIT =====
